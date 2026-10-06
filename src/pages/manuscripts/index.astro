@@ -28,7 +28,7 @@ const manuscripts = (await getCollection('manuscripts')).sort((a, b) => a.data.o
       <ul class="ms-grid">
         {manuscripts.map((m) => (
           <li>
-            <a class="ms-card" href={`/manuscripts/${m.id}/`}>
+            <a class="ms-card" href={`/${m.id}/`}>
               <h3>{m.data.title}</h3>
               {m.data.romanization && <p class="ms-rom">{m.data.romanization}</p>}
               <span class="ms-nature">{m.data.nature}</span>
@@ -49,25 +49,25 @@ const manuscripts = (await getCollection('manuscripts')).sort((a, b) => a.data.o
         </thead>
         <tbody>
           <tr>
-            <td><a href="/manuscripts/yingyao/">《英耀篇》</a></td>
+            <td><a href="/yingyao/">《英耀篇》</a></td>
             <td>法（原理）</td>
             <td>如何让目标自己吐露家底</td>
             <td>六字真言：敲打击审千隆卖</td>
           </tr>
           <tr>
-            <td><a href="/manuscripts/junma/">《军马篇》</a></td>
+            <td><a href="/junma/">《军马篇》</a></td>
             <td>法（话术）</td>
             <td>如何把原理变成具体台词</td>
             <td>身份识别判据 + 话术模板</td>
           </tr>
           <tr>
-            <td><a href="/manuscripts/zhafei/">《扎飞篇》</a></td>
+            <td><a href="/zhafei/">《扎飞篇》</a></td>
             <td>术（仪式）</td>
             <td>如何让目标跨过自我怀疑</td>
             <td>承诺一致性机制</td>
           </tr>
           <tr>
-            <td><a href="/manuscripts/abao/">《阿宝篇》</a></td>
+            <td><a href="/abao/">《阿宝篇》</a></td>
             <td>大法（变现）</td>
             <td>如何长期、可持续地获利</td>
             <td>阿宝戒律：反竭泽而渔</td>

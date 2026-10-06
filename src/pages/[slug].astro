@@ -1,6 +1,6 @@
 ---
 import { getCollection, render } from 'astro:content';
-import Base from '../../layouts/Base.astro';
+import Base from '../layouts/Base.astro';
 
 export async function getStaticPaths() {
   const entries = await getCollection('manuscripts');
@@ -58,11 +58,13 @@ const h2 = headings.filter((h) => h.depth === 2);
       <Content />
       <div class="pager">
         {prev ? (
-          <a href={`/manuscripts/${prev.id}/`}><span>← 上一篇</span>{prev.data.title}</a>
+          <a href={`/${prev.id}/`}><span>← 上一篇</span>{prev.data.title}</a>
         ) : <span></span>}
         {next ? (
-          <a href={`/manuscripts/${next.id}/`} style="text-align:right"><span>下一篇 →</span>{next.data.title}</a>
-        ) : <span></span>}
+          <a href={`/${next.id}/`} style="text-align:right"><span>下一篇 →</span>{next.data.title}</a>
+        ) : (
+          <a href="/manuscripts/" style="text-align:right"><span>全部 →</span>四本秘本总览</a>
+        )}
       </div>
     </div>
   </article>

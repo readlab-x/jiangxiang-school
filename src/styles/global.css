@@ -349,7 +349,8 @@ a:hover { text-decoration: underline; }
 }
 
 @media (max-width: 640px) {
-  .site-nav { gap: 14px; font-size: 13px; }
+  .site-head .wrap { height: auto; flex-direction: column; align-items: flex-start; gap: 8px; padding-top: 12px; padding-bottom: 10px; }
+  .site-nav { flex-wrap: wrap; gap: 8px 14px; font-size: 13px; }
   .hero { padding: 48px 0 40px; }
   .prose h2 { font-size: 23px; }
   .prose blockquote { padding: 18px; font-size: 15.5px; }

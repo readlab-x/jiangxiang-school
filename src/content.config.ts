@@ -14,7 +14,7 @@ const chapters = defineCollection({
 });
 
 const manuscripts = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/manuscripts' }),
+  loader: glob({ pattern: '**/*.md', base: './src/content/books' }),
   schema: z.object({
     title: z.string(),
     romanization: z.string().optional(),

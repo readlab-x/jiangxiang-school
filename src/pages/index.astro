@@ -53,7 +53,7 @@ const manuscripts = (await getCollection('manuscripts')).sort((a, b) => a.data.o
       <ul class="ms-grid" style="margin-top:28px">
         {manuscripts.map((m) => (
           <li>
-            <a class="ms-card" href={`/manuscripts/${m.id}/`}>
+            <a class="ms-card" href={`/${m.id}/`}>
               <h3>{m.data.title}</h3>
               {m.data.romanization && <p class="ms-rom">{m.data.romanization}</p>}
               <span class="ms-nature">{m.data.nature}</span>
