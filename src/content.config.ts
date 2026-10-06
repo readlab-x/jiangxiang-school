@@ -13,7 +13,7 @@ const chapters = defineCollection({
   }),
 });
 
-const manuscripts = defineCollection({
+const books = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/books' }),
   schema: z.object({
     title: z.string(),
@@ -27,4 +27,15 @@ const manuscripts = defineCollection({
   }),
 });
 
-export const collections = { chapters, manuscripts };
+const home = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/home' }),
+  schema: z.object({
+    title: z.string(),
+    subtitle: z.string().optional(),
+    part: z.string(),
+    summary: z.string(),
+    readingTime: z.string().optional(),
+  }),
+});
+
+export const collections = { chapters, books, home };

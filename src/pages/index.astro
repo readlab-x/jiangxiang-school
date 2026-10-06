@@ -1,9 +1,14 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, getEntry, render } from 'astro:content';
 import Base from '../layouts/Base.astro';
 
-const chapters = (await getCollection('chapters')).sort((a, b) => a.data.order - b.data.order);
-const manuscripts = (await getCollection('manuscripts')).sort((a, b) => a.data.order - b.data.order);
+const books = (await getCollection('books')).sort((a, b) => a.data.order - b.data.order);
+const psychology = await getEntry('chapters', 'psychology');
+
+const intro = await getEntry('home', 'introduction');
+if (!intro) throw new Error('缺少 src/content/home/introduction.md');
+const { Content: IntroContent, headings } = await render(intro);
+const toc = headings.filter((h) => h.depth === 2);
 ---
 
 <Base
@@ -28,22 +33,23 @@ const manuscripts = (await getCollection('manuscripts')).sort((a, b) => a.data.o
     </div>
   </section>
 
+  <article class="prose">
+    <div class="wrap-narrow">
+      <nav class="toc">
+        <div class="toc-title">本页目录</div>
+        <ol>
+          {toc.map((hd) => (
+            <li><a href={`#${hd.slug}`}>{hd.text}</a></li>
+          ))}
+        </ol>
+      </nav>
+      <IntroContent />
+    </div>
+  </article>
+
   <section class="prose">
     <div class="wrap">
-      <p class="part-label">一 · 它是什么</p>
-      <ul class="card-grid">
-        {chapters.map((c) => (
-          <li>
-            <a class="card" href={`/chapters/${c.id}/`}>
-              <span class="card-num">{String(c.data.order).padStart(2, '0')}</span>
-              <h3>{c.data.title}</h3>
-              <p>{c.data.summary}</p>
-            </a>
-          </li>
-        ))}
-      </ul>
-
-      <h2 style="margin-top:64px">二 · 四本秘本</h2>
+      <h2>四本秘本</h2>
       <p>
         江相派的"四本书"并非《麻衣神相》一类的相学著作，而是四本专门用于行骗的秘本。
         它们合在一起是一套完整的作业系统：<strong>《英耀篇》</strong>提供原理，
@@ -51,7 +57,7 @@ const manuscripts = (await getCollection('manuscripts')).sort((a, b) => a.data.o
         <strong>《阿宝篇》</strong>提供变现方式。
       </p>
       <ul class="ms-grid" style="margin-top:28px">
-        {manuscripts.map((m) => (
+        {books.map((m) => (
           <li>
             <a class="ms-card" href={`/${m.id}/`}>
               <h3>{m.data.title}</h3>
@@ -70,28 +76,24 @@ const manuscripts = (await getCollection('manuscripts')).sort((a, b) => a.data.o
         各来源对文本内容的描述基本一致，分歧在于归类。本站采用四篇并列说，并保留分歧记录。
       </div>
 
-      <h2>三 · 一个判断</h2>
-      <p>这套流程里没有一步是"预测"。</p>
+      <h2>为什么会相信</h2>
       <p>
-        回看七步：筛选目标、建立信任、收集信息、制造恐惧、导向仪式、长期榨取、撤离——
-        <strong>没有一步在获取目标的真实命运。</strong>
-        所有的"神准"都是信息回流的错觉：目标自己说出的话，被表演者复述回来，
-        目标便以为这是"看出来的"。
+        这套流程里没有一步是"预测"。回看七步：筛选目标、建立信任、收集信息、制造恐惧、导向仪式、
+        长期榨取、撤离——<strong>没有一步在获取目标的真实命运。</strong>
+        所有的"神准"都是信息回流的错觉。
       </p>
       <p>
-        《英耀篇》把这件事说得最直白——"英"指家底身世，"耀"指用高明的手法去取得。
-        它从不声称能算出你的身世，它声称的是<strong>看得出</strong>。
-        前者是断言，后者是表演，而表演可以做到万无一失。
+        江相派使用的每一种手法，在今天的心理学文献里都有正式名称：巴纳姆效应、冷读术、
+        确认偏误、承诺一致性、信息级联。这些机制在 1940 年代被正式命名之前，
+        已经在广东的街头运行了两百年。<strong>换了外壳，机制没变。</strong>
       </p>
-
-      <div class="callout">
-        <div class="callout-title">这为什么今天仍然有效</div>
-        <p>
-          因为它的操作对象不是知识，是人的认知偏差。巴纳姆效应、冷读术、承诺一致性、
-          信息级联——这些机制在1940年代被心理学正式命名之前，已经在广东的街头运行了两百年。
-          换了外壳，机制没变。
+      {psychology && (
+        <p style="margin-top:20px">
+          <a href={`/chapters/${psychology.id}/`} style="font-size:15px">
+            展开阅读：为什么会相信 · 一套没有魔法却稳定有效的骗术 →
+          </a>
         </p>
-      </div>
+      )}
     </div>
   </section>
 </Base>

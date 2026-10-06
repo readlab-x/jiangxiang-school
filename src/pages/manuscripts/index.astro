@@ -2,7 +2,7 @@
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 
-const manuscripts = (await getCollection('manuscripts')).sort((a, b) => a.data.order - b.data.order);
+const manuscripts = (await getCollection('books')).sort((a, b) => a.data.order - b.data.order);
 ---
 
 <Base
