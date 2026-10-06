@@ -1,0 +1,106 @@
+---
+const groups = [
+  {
+    name: '人物',
+    items: [
+      ['天', '父'], ['地', '母'], ['追', '子女'], ['比', '兄弟姊妹'],
+      ['七', '男性'], ['八', '女性'], ['四子', '士子'], ['生孙', '商贾'],
+      ['一哥', '目标（原指尸体）'], ['火底', '有财有势的人'], ['畜生', '混吉人士'],
+      ['工', '劳工'], ['花底', '以交际换取生计的女性'], ['老念', '和尚、道士'],
+      ['琴头', '房东'], ['拖尾', '官吏'], ['蜂仔', '密探'], ['发家', '暴发户'],
+      ['帝寿', '愚蠢好骗的人'], ['盲丙', '不知被骗的人'],
+    ],
+  },
+  {
+    name: '货币与境遇',
+    items: [
+      ['皮锦', '银元'], ['星星', '毫（角、分）'], ['黄', '金子'], ['白', '银子'],
+      ['火', '有财有势'], ['水', '贫苦'], ['古', '倒楣'], ['古烁', '病患'],
+      ['招子', '眼睛'], ['拜万寿', '无人可骗'],
+    ],
+  },
+  {
+    name: '数目',
+    items: [
+      ['流', '一'], ['月', '二'], ['汪', '三'], ['则', '四'], ['中', '五'],
+      ['孙', '六'], ['星', '七'], ['张', '八'], ['崖', '九'], ['局', '十'],
+      ['尺', '百'], ['丈', '千'], ['方', '万'],
+    ],
+  },
+  {
+    name: '行业与行事',
+    items: [
+      ['班目 / 当相', '看相'], ['叩经', '占卦'], ['问丙', '算命'], ['扎飞', '拜神'],
+      ['军马', '语言'], ['昆码', '骗人的说话'], ['做阿宝', '设局诈骗'],
+      ['放白鸽', '以女色骗男人财'], ['拆白', '骗财又骗色'], ['拐子', '诱拐'],
+      ['生路', '生意'], ['兜生路', '骗局的前期铺垫'], ['博观', '调查清楚'],
+      ['梗媒 / 主媒', '中间人'], ['响档', '好的现状'], ['收山', '退出江湖'],
+      ['散水', '逃遁'], ['兴生路', '诱人入壳而受骗'],
+    ],
+  },
+];
+
+const total = groups.reduce((n, g) => n + g.items.length, 0);
+---
+
+<div class="slang">
+  <div class="slang-bar">
+    <input
+      type="search"
+      class="slang-input"
+      placeholder="搜一个词，比如：一哥、隆、扎飞……"
+      aria-label="搜索黑话"
+    />
+    <span class="slang-count" data-count>{total} 条</span>
+  </div>
+
+  <div class="slang-groups" data-list>
+    {groups.map((g) => (
+      <section class="slang-group" data-group={g.name}>
+        <h3>{g.name}</h3>
+        <dl>
+          {g.items.map(([k, v]) => (
+            <div class="slang-row" data-term={`${k} ${v}`}>
+              <dt>{k}</dt>
+              <dd>{v}</dd>
+            </div>
+          ))}
+        </dl>
+        <p class="slang-empty" hidden>此组无匹配项</p>
+      </section>
+    ))}
+  </div>
+
+  <p class="slang-none" data-none hidden>没有匹配的词条。</p>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.slang').forEach((el) => {
+    const input = el.querySelector<HTMLInputElement>('.slang-input')!;
+    const rows = Array.from(el.querySelectorAll<HTMLElement>('.slang-row'));
+    const groups = Array.from(el.querySelectorAll<HTMLElement>('.slang-group'));
+    const none = el.querySelector<HTMLElement>('[data-none]')!;
+    const count = el.querySelector<HTMLElement>('[data-count]')!;
+
+    const apply = () => {
+      const q = input.value.trim().toLowerCase();
+      let hit = 0;
+      rows.forEach((r) => {
+        const on = !q || (r.dataset.term ?? '').toLowerCase().includes(q);
+        r.hidden = !on;
+        if (on) hit++;
+      });
+      groups.forEach((g) => {
+        const any = g.querySelectorAll<HTMLElement>('.slang-row:not([hidden])').length > 0;
+        g.hidden = !any;
+        const e = g.querySelector<HTMLElement>('.slang-empty');
+        if (e) e.hidden = any;
+      });
+      none.hidden = hit > 0;
+      count.textContent = q ? `${hit} / ${rows.length} 条` : `${rows.length} 条`;
+    };
+
+    input.addEventListener('input', apply);
+    input.addEventListener('search', apply);
+  });
+</script>

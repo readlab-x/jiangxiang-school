@@ -1,0 +1,96 @@
+---
+const words = [
+  {
+    ch: '敲',
+    py: 'qīao',
+    gloss: '旁敲侧击',
+    how: '不直接问目标关心的事，绕到相关话题上。「敲山震虎」——让对方自己把心事说出来。',
+    now: '开放式提问诱导自我披露。销售培训、心理咨询初次访谈用的是同一套。',
+  },
+  {
+    ch: '打',
+    py: 'dǎ',
+    gloss: '突然发问',
+    how: '使对方不防而仓促间吐露真相。原文的节奏是「急打慢千」——打要急，在对方还没组织好防御的瞬间出手。',
+    now: '认知负荷的突然击穿。人在疲惫或分心时最容易说出真话。',
+  },
+  {
+    ch: '审',
+    py: 'shěn',
+    gloss: '审貌辨色',
+    how: '判分真假，可从已知推断未来。这一步是从已获得的信息做外推，而不是凭空推断。',
+    now: '最接近科学推理的一步。给定少量可靠线索做结构化外推。',
+  },
+  {
+    ch: '千',
+    py: 'qiān',
+    gloss: '刺激恐吓',
+    how: '攻击要害。它的作用不是让对方相信你准，而是让对方害怕。',
+    now: '恐惧是说服的底层机制。恐惧一旦激活，人会放弃独立判断，转而向施压者求助。',
+  },
+  {
+    ch: '隆',
+    py: 'lóng',
+    gloss: '赞美恭维',
+    how: '「千」的解药。原文：「先千后隆，无往不利；有千无隆，帝寿之材。」只恐吓会吓跑人，只抚慰则对方不会付钱。',
+    now: '损失厌恶与前景理论的原始表达。先让损失具体而迫近，再提供规避方案。',
+  },
+  {
+    ch: '卖',
+    py: 'mài',
+    gloss: '摊开底牌',
+    how: '掌握对方，并以从容之摊出，使其惊异并折服。前五步是收集和铺垫，这一步是亮牌。',
+    now: '信息不对称的重分配。信息其实来自对方，但归因被错误地记到表演者头上。',
+  },
+];
+---
+
+<div class="six">
+  <div class="six-tabs" role="tablist">
+    {words.map((w, i) => (
+      <button
+        type="button"
+        class="six-tab"
+        role="tab"
+        data-word={w.ch}
+        aria-selected={i === 0 ? 'true' : 'false'}
+      >
+        <span class="six-ch">{w.ch}</span>
+        <span class="six-py">{w.py}</span>
+      </button>
+    ))}
+  </div>
+
+  <div class="six-stage">
+    {words.map((w, i) => (
+      <div class="six-panel" data-word={w.ch} hidden={i !== 0}>
+        <div class="six-char">{w.ch}</div>
+        <div class="six-body">
+          <h3>{w.gloss}</h3>
+          <div class="six-row">
+            <span class="six-label">原文怎么说</span>
+            <p>{w.how}</p>
+          </div>
+          <div class="six-row six-row-now">
+            <span class="six-label">这在今天叫什么</span>
+            <p>{w.now}</p>
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.six').forEach((el) => {
+    const tabs = el.querySelectorAll<HTMLButtonElement>('.six-tab');
+    const panels = el.querySelectorAll<HTMLElement>('.six-panel');
+    tabs.forEach((t) =>
+      t.addEventListener('click', () => {
+        const k = t.dataset.word!;
+        tabs.forEach((x) => x.setAttribute('aria-selected', String(x === t)));
+        panels.forEach((p) => (p.hidden = p.dataset.word !== k));
+      })
+    );
+  });
+</script>

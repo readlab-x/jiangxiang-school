@@ -1,99 +1,212 @@
 ---
-import { getCollection, getEntry, render } from 'astro:content';
 import Base from '../layouts/Base.astro';
+import FlowChart from '../components/FlowChart.astro';
+import SixWords from '../components/SixWords.astro';
+import SlangTable from '../components/SlangTable.astro';
+import { bookSegments, segmentMeta } from '../data/segments';
 
-const books = (await getCollection('books')).sort((a, b) => a.data.order - b.data.order);
-const psychology = await getEntry('chapters', 'psychology');
+const books = ['yingyao', 'junma', 'zhafei', 'abao'].map((slug) => ({
+  slug,
+  ...segmentMeta[slug],
+  count: bookSegments[slug].length,
+}));
 
-const intro = await getEntry('home', 'introduction');
-if (!intro) throw new Error('缺少 src/content/home/introduction.md');
-const { Content: IntroContent, headings } = await render(intro);
-const toc = headings.filter((h) => h.depth === 2);
+const lineage = [
+  { who: '方照舆', when: '康熙年间', what: '洪门五祖之一，被奉为祖师。以相命先生身份行走江湖，掩护反清活动。', role: '祖师（追认）' },
+  { who: '张雪庵', when: '清末', what: '号「玄机子」，广东文帮诈骗集团公推的教主。租下顺德无人敢住的「鬼屋」布下十年之局，连目标身上的朱砂痣都能说出。', role: '教主' },
+  { who: '何立庭', when: '1845–1928', what: '张雪庵的嫡传弟子。新会人，迁往香港荷李活道营业，兼营鸦片烟馆。两广相连的枢纽人物。', role: '掌门' },
+  { who: '李星南', when: '民国', what: '以「道术种金」著名，善用女色，最终被香港当局通缉（或被捕入狱）。', role: '弟子' },
+  { who: '傅吉臣', when: '民国', what: '因用「扎飞」手段骗他人之妾为己妾，违反门规，同门拒绝其继任掌门。江相派由此断裂。', role: '弟子（失位）' },
+];
 ---
 
 <Base
   title="江相派 · 江湖上的宰相"
-  description="江相派科普：晚清民初活跃于广东的诈骗集团。它的组织、行骗流程、四本秘本，以及这些手法在今天为何仍然有效。"
+  description="江相派：晚清民初活跃于广东的诈骗集团。四本秘本原文逐段注解，七步流水线、六字真言、江湖黑话交互式拆解。"
 >
   <section class="hero">
     <div class="wrap">
       <div class="hero-kicker">骗局解剖 · 非命理</div>
       <h1>江湖上的宰相</h1>
       <p>
-        江相派不是一个相术学派，而是一个以看相算命为掩护、经营了两百余年的诈骗集团。
-        它留下了一套完整的组织制度、一条七步作业流水线，以及四本至今仍可对照验证的操作手册。
-        本站做的是把这一切拆开来讲。
+        一个经营了两百年的诈骗集团留下的完整操作手册。
+        这里没有命理，只有流程、话术、仪式，和它们为什么至今仍然有效。
       </p>
       <div class="hero-meta">
         <span>晚清至民国初年</span>
         <span>大本营广州</span>
         <span>粤语语系范围</span>
-        <span>四本秘本全文</span>
+      </div>
+      <div class="hero-jump">
+        <a href="#books">四本秘本原文</a>
+        <a href="#flow">七步流水线</a>
+        <a href="#six">六字真言</a>
+        <a href="#slang">江湖黑话</a>
+        <a href="#lineage">掌门谱系</a>
       </div>
     </div>
   </section>
 
-  <article class="prose">
-    <div class="wrap-narrow">
-      <nav class="toc">
-        <div class="toc-title">本页目录</div>
-        <ol>
-          {toc.map((hd) => (
-            <li><a href={`#${hd.slug}`}>{hd.text}</a></li>
-          ))}
-        </ol>
-      </nav>
-      <IntroContent />
-    </div>
-  </article>
-
-  <section class="prose">
+  <section class="band" id="books">
     <div class="wrap">
-      <h2>四本秘本</h2>
-      <p>
-        江相派的"四本书"并非《麻衣神相》一类的相学著作，而是四本专门用于行骗的秘本。
-        它们合在一起是一套完整的作业系统：<strong>《英耀篇》</strong>提供原理，
-        <strong>《军马篇》</strong>提供话术，<strong>《扎飞篇》</strong>提供仪式，
-        <strong>《阿宝篇》</strong>提供变现方式。
+      <p class="band-kicker">四本秘本 · 原文逐段注解</p>
+      <h2>不是相书，是骗术手册</h2>
+      <p class="band-lede">
+        「江相派的四本书」常被误解为《麻衣神相》一类的相学著作。
+        实际流传下来的是四本专门用于行骗的秘本——每一本都是原文与注解对照，没有摘要。
       </p>
-      <ul class="ms-grid" style="margin-top:28px">
-        {books.map((m) => (
+
+      <ul class="book-grid">
+        {books.map((b) => (
           <li>
-            <a class="ms-card" href={`/${m.id}/`}>
-              <h3>{m.data.title}</h3>
-              {m.data.romanization && <p class="ms-rom">{m.data.romanization}</p>}
-              <span class="ms-nature">{m.data.nature}</span>
-              <p>{m.data.summary}</p>
+            <a class="book-card" href={`/${b.slug}/`}>
+              <div class="book-card-top">
+                <span class="book-role">{b.role}</span>
+                <span class="book-count">{b.count} 段</span>
+              </div>
+              <h3>{b.title}</h3>
+              <p class="book-rom">{b.romanization}</p>
+              <p class="book-desc">{b.nature}</p>
+              <span class="book-go">读原文与注解 →</span>
             </a>
           </li>
         ))}
       </ul>
 
-      <div class="note" style="margin-top:36px">
-        <strong>关于"三宝"与"四本"的史料分歧：</strong>
-        维基百科《江相派》词条并列四篇为"法术经典"，同时又称"师门三宝"指英耀、扎飞、阿宝，
-        将军马篇另列。另一说认为军马篇本就是英耀篇的配对附录。
-        各来源对文本内容的描述基本一致，分歧在于归类。本站采用四篇并列说，并保留分歧记录。
+      <div class="note">
+        <strong>史料分歧：</strong>
+        维基百科《江相派》词条并列四篇为「法术经典」，同时又称「师门三宝」指英耀、扎飞、阿宝，将军马篇另列。
+        另一说认为军马篇本就是英耀篇的配对附录。
+        各来源对文本内容的描述基本一致，分歧只在于归类。本站采用四篇并列说，并保留分歧记录。
       </div>
+    </div>
+  </section>
 
-      <h2>为什么会相信</h2>
-      <p>
-        这套流程里没有一步是"预测"。回看七步：筛选目标、建立信任、收集信息、制造恐惧、导向仪式、
-        长期榨取、撤离——<strong>没有一步在获取目标的真实命运。</strong>
-        所有的"神准"都是信息回流的错觉。
+  <section class="band band-alt" id="flow">
+    <div class="wrap">
+      <p class="band-kicker">行骗流程 · 点开每一步</p>
+      <h2>七步流水线</h2>
+      <p class="band-lede">
+        从锁定目标到脱身，江相派的作业流程与今日的电信诈骗高度相似。
+        点开任意一步看细节。
       </p>
-      <p>
-        江相派使用的每一种手法，在今天的心理学文献里都有正式名称：巴纳姆效应、冷读术、
-        确认偏误、承诺一致性、信息级联。这些机制在 1940 年代被正式命名之前，
-        已经在广东的街头运行了两百年。<strong>换了外壳，机制没变。</strong>
+      <FlowChart />
+    </div>
+  </section>
+
+  <section class="band" id="six">
+    <div class="wrap">
+      <p class="band-kicker">《英耀篇》核心 · 点开每个字</p>
+      <h2>六字真言</h2>
+      <p class="band-lede">
+        <code>敲</code> <code>打</code> <code>审</code> <code>千</code> <code>隆</code> <code>卖</code>
+        ——江相派唯一以「真传」名义传授的原理总纲。
+        原文说：「无千不响，无隆不成。」这六个字至今有效。
       </p>
-      {psychology && (
-        <p style="margin-top:20px">
-          <a href={`/chapters/${psychology.id}/`} style="font-size:15px">
-            展开阅读：为什么会相信 · 一套没有魔法却稳定有效的骗术 →
-          </a>
+      <SixWords />
+    </div>
+  </section>
+
+  <section class="band band-alt" id="slang">
+    <div class="wrap">
+      <p class="band-kicker">可检索 · 共 60 余条</p>
+      <h2>江湖黑话</h2>
+      <p class="band-lede">
+        秘本全篇以黑话写成，为的是防泄密——外人读来如读天书。
+        这里把它们整理出来，可以搜。
+      </p>
+      <SlangTable />
+    </div>
+  </section>
+
+  <section class="band" id="lineage">
+    <div class="wrap">
+      <p class="band-kicker">可考的传承</p>
+      <h2>掌门谱系</h2>
+      <p class="band-lede">
+        江相派留下了一条少数有史料支撑的谱系。
+        它同时也是一份消亡原因说明书。
+      </p>
+      <ol class="lineage">
+        {lineage.map((p) => (
+          <li class="lin">
+            <div class="lin-when">{p.when}</div>
+            <div class="lin-body">
+              <h3>{p.who}<span class="lin-role">{p.role}</span></h3>
+              <p>{p.what}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+      <div class="callout">
+        <div class="callout-title">它是怎么消亡的</div>
+        <p>
+          不是被取缔，也不是被科学证伪——而是<strong>它赖以生存的生态消失了</strong>。
+          傅吉臣因违反门规失去继任资格，而更根本的原因是：香港法治转好，
+          「同行不需要互相保护或与其他帮派谈判」了。
         </p>
-      )}
+        <p>
+          江相派要求受害者「有所畏怯而不敢言」，靠的是正规渠道不可信这个前提。
+          当报警真的有用，这套体系的地基就没了。<strong>它不是被破除的，是被竞争的。</strong>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band band-alt" id="psych">
+    <div class="wrap">
+      <p class="band-kicker">为什么它有效</p>
+      <h2>这不是魔法，是认知偏差</h2>
+      <p class="band-lede">
+        这套流程里没有一步是「预测」。
+        回看七步：筛选目标、建立信任、收集信息、制造恐惧、导向仪式、长期榨取、撤离——
+        <strong>没有一步在获取目标的真实命运。</strong>
+        所有的「神准」都是信息回流的错觉。
+      </p>
+
+      <ul class="mech-grid">
+        <li>
+          <h3>巴纳姆效应</h3>
+          <p>「志大才疏，空把恨」这类断语对绝大多数人都成立。1948 年福勒实验：全班发同一份分析，平均准确度 4.26/5。</p>
+        </li>
+        <li>
+          <h3>冷读术</h3>
+          <p>从衣着、口吻、眼神做结构化外推。信息其实来自目标自己，只是被复述回来后归因错了。</p>
+        </li>
+        <li>
+          <h3>恐惧激活</h3>
+          <p>「非有所惧，即有所求」——没有恐惧和需求，人不会停留。恐惧一旦激活，人会放弃独立判断。</p>
+        </li>
+        <li>
+          <h3>承诺一致性</h3>
+          <p>烧香、写下生辰八字、付第一笔钱。仪式的作用是让人跨过「我是不是被骗了」这个念头。</p>
+        </li>
+        <li>
+          <h3>信息级联</h3>
+          <p>「小验然后大响，众信然后大成。」一旦有旁人证实灵验，后续验证成本几乎归零。</p>
+        </li>
+        <li>
+          <h3>自我实现</h3>
+          <p>「你今年容易破财」→焦虑→决策保守→真的错失机会。不是命运，是他自己帮它实现的。</p>
+        </li>
+      </ul>
+
+      <p style="margin-top:32px">
+        <a class="more-link" href="/mechanism/">展开阅读：为什么会相信 · 完整机制与原文对照 →</a>
+      </p>
+    </div>
+  </section>
+
+  <section class="band band-end">
+    <div class="wrap">
+      <blockquote class="big-quote">
+        <p>神鬼无凭，唯人是依。</p>
+        <cite>——《扎飞篇》</cite>
+      </blockquote>
+      <p class="quote-note">
+        这句话出自骗子之口，而且是整篇里最诚实的一句。
+        骗子不指望鬼神，指望人——指望从众、指望恐惧、指望你不会说出去。
+      </p>
     </div>
   </section>
 </Base>

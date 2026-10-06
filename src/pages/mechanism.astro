@@ -1,0 +1,81 @@
+---
+import Base from '../layouts/Base.astro';
+import { mechanisms } from '../data/mechanisms';
+---
+
+<Base
+  title="为什么会相信 · 江相派"
+  description="巴纳姆效应、冷读术、归因偏误、恐惧激活、前景理论、承诺一致性、信息级联、自我实现预言——每一条都对照江相派原文。"
+>
+  <div class="ms-head">
+    <div class="wrap">
+      <p class="part-label">骗局机制</p>
+      <h1>为什么会相信</h1>
+      <p class="page-sub">一套没有魔法却稳定有效的骗术</p>
+    </div>
+  </div>
+
+  <article class="ms-body">
+    <div class="wrap">
+      <div class="note" style="margin-bottom:36px">
+        这套流程里没有一步是"预测"。七步流水线中，
+        <strong>没有一步在获取目标的真实命运</strong>——
+        所有的"神准"都是信息回流的错觉。下面八条机制，每一条都配江相派原文。
+        点开任意一条对照看。
+      </div>
+
+      <ul class="mech-acc">
+        {mechanisms.map((m, i) => (
+          <li class="mech-item">
+            <button type="button" class="mech-head" aria-expanded={i === 0 ? 'true' : 'false'}>
+              <span class="mech-no">{String(i + 1).padStart(2, '0')}</span>
+              <span class="mech-names">
+                <span class="mech-term">{m.term}</span>
+                <span class="mech-en">{m.en}</span>
+              </span>
+              <span class="mech-caret" aria-hidden="true"></span>
+            </button>
+            <div class="mech-body" hidden={i !== 0}>
+              <div class="mech-orig">
+                <span class="mech-label">江相派原文</span>
+                <p>{m.original}</p>
+              </div>
+              <div class="mech-two">
+                <div>
+                  <span class="mech-label">它实际在做什么</span>
+                  <p>{m.explain}</p>
+                </div>
+                <div>
+                  <span class="mech-label">心理学怎么说</span>
+                  <p>{m.today}</p>
+                </div>
+              </div>
+            </div>
+          </li>
+        ))}
+      </ul>
+
+      <blockquote class="big-quote" style="margin-top:56px">
+        <p>神鬼无凭，唯人是依。</p>
+        <cite>——《扎飞篇》</cite>
+      </blockquote>
+      <p class="quote-note">
+        骗子不指望鬼神，指望人——指望从众、指望恐惧、指望你不会说出去。
+        这些机制在 1940 年代被心理学正式命名之前，已经在广东的街头运行了两百年。
+        换了外壳，机制没变。
+      </p>
+    </div>
+  </article>
+</Base>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.mech-item').forEach((item) => {
+    const btn = item.querySelector<HTMLButtonElement>('.mech-head')!;
+    const body = item.querySelector<HTMLElement>('.mech-body')!;
+    btn.addEventListener('click', () => {
+      const open = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!open));
+      body.hidden = open;
+    });
+  });
+</script>

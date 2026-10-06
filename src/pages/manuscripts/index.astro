@@ -1,8 +1,9 @@
 ---
-import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
+import { bookSegments, segmentMeta } from '../../data/segments';
 
-const manuscripts = (await getCollection('books')).sort((a, b) => a.data.order - b.data.order);
+const order = ['yingyao', 'junma', 'zhafei', 'abao'];
+const books = order.map((slug) => ({ slug, ...segmentMeta[slug], count: bookSegments[slug].length }));
 ---
 
 <Base
@@ -26,13 +27,13 @@ const manuscripts = (await getCollection('books')).sort((a, b) => a.data.order -
   <article class="prose">
     <div class="wrap">
       <ul class="ms-grid">
-        {manuscripts.map((m) => (
+        {books.map((b) => (
           <li>
-            <a class="ms-card" href={`/${m.id}/`}>
-              <h3>{m.data.title}</h3>
-              {m.data.romanization && <p class="ms-rom">{m.data.romanization}</p>}
-              <span class="ms-nature">{m.data.nature}</span>
-              <p>{m.data.summary}</p>
+            <a class="ms-card" href={`/${b.slug}/`}>
+              <h3>{b.title}</h3>
+              <p class="ms-rom">{b.romanization}</p>
+              <span class="ms-nature">{b.role} · {b.count} 段</span>
+              <p>{b.nature}。每一段都是原文与注解对照，无摘要。</p>
             </a>
           </li>
         ))}

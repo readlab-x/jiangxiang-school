@@ -1,67 +1,56 @@
 ---
-import { getCollection, render } from 'astro:content';
 import Base from '../layouts/Base.astro';
+import { bookSegments, segmentMeta } from '../data/segments';
 
-export async function getStaticPaths() {
-  const entries = await getCollection('books');
-  return entries.map((e) => ({ params: { slug: e.id }, props: { entry: e } }));
+export function getStaticPaths() {
+  return Object.keys(segmentMeta).map((slug) => ({ params: { slug } }));
 }
 
-const { entry } = Astro.props;
-const { Content, headings } = await render(entry);
-const all = (await getCollection('books')).sort((a, b) => a.data.order - b.data.order);
-const idx = all.findIndex((e) => e.id === entry.id);
-const prev = all[idx - 1];
-const next = all[idx + 1];
-const h2 = headings.filter((h) => h.depth === 2);
+const { slug } = Astro.params as { slug: string };
+const meta = segmentMeta[slug];
+const segments = bookSegments[slug];
+const order = ['yingyao', 'junma', 'zhafei', 'abao'];
+const i = order.indexOf(slug);
+const prevSlug = order[i - 1];
+const nextSlug = order[i + 1];
 ---
 
-<Base title={`${entry.data.title} · 江相派秘本`} description={entry.data.summary}>
-  <div class="page-head">
-    <div class="wrap-narrow">
-      <p class="part-label">四本秘本 · 第 {entry.data.order} 篇</p>
-      <h1>{entry.data.title}</h1>
-      {entry.data.romanization && <p class="page-sub">{entry.data.romanization}</p>}
-      <p class="page-summary">{entry.data.summary}</p>
-      <dl class="meta-grid">
-        <div class="meta-box">
-          <dt>性质</dt>
-          <dd>{entry.data.nature}</dd>
-        </div>
-        <div class="meta-box">
-          <dt>传授</dt>
-          <dd>{entry.data.transmission}</dd>
-        </div>
-        <div class="meta-box">
-          <dt>现代解读</dt>
-          <dd>{entry.data.modernReading}</dd>
-        </div>
-      </dl>
-      <div class="footnote">
-        <strong>史料说明：</strong>{entry.data.sourceNote}
+<Base title={`${meta.title} 原文与注解 · 江相派`} description={`${meta.title}（${meta.romanization}）逐段原文与注解。`}>
+  <div class="ms-head">
+    <div class="wrap">
+      <p class="part-label">四本秘本 · {meta.role}</p>
+      <div class="ms-head-row">
+        <h1>{meta.title}</h1>
+        <span class="ms-nature">{meta.nature}</span>
       </div>
+      <p class="ms-rom">{meta.romanization}</p>
     </div>
   </div>
 
-  <article class="prose">
-    <div class="wrap-narrow">
-      {h2.length > 2 && (
-        <nav class="toc">
-          <div class="toc-title">本页目录</div>
-          <ol>
-            {h2.map((hd) => (
-              <li><a href={`#${hd.slug}`}>{hd.text}</a></li>
-            ))}
-          </ol>
-        </nav>
-      )}
-      <Content />
+  <article class="ms-body">
+    <div class="wrap">
+      <ol class="seg-list">
+        {segments.map((s) => (
+          <li class="seg" id={`seg-${s.no}`}>
+            <div class="seg-no">{String(s.no).padStart(2, '0')}</div>
+            <div class="seg-main">
+              <blockquote class="seg-text">{s.text}</blockquote>
+              {s.tag && <span class="seg-tag">{s.tag}</span>}
+              <div class="seg-note">
+                <span class="seg-note-label">注解</span>
+                <p set:html={s.note.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')} />
+              </div>
+            </div>
+          </li>
+        ))}
+      </ol>
+
       <div class="pager">
-        {prev ? (
-          <a href={`/${prev.id}/`}><span>← 上一篇</span>{prev.data.title}</a>
+        {prevSlug ? (
+          <a href={`/${prevSlug}/`}><span>← 上一篇</span>{segmentMeta[prevSlug].title}</a>
         ) : <span></span>}
-        {next ? (
-          <a href={`/${next.id}/`} style="text-align:right"><span>下一篇 →</span>{next.data.title}</a>
+        {nextSlug ? (
+          <a href={`/${nextSlug}/`} style="text-align:right"><span>下一篇 →</span>{segmentMeta[nextSlug].title}</a>
         ) : (
           <a href="/manuscripts/" style="text-align:right"><span>全部 →</span>四本秘本总览</a>
         )}

@@ -1,0 +1,61 @@
+---
+const steps = [
+  { n: 1, key: '一哥', title: '锁定目标', body: '江相派不饥不择食。《英耀篇》教的是"砂砾丛中辨金石"——真心求教的、装穷试探的、专程踢馆的，一眼分开。', tag: '筛' },
+  { n: 2, key: '军马', title: '开始出击', body: '"出马"取自象棋，是杀着。原文强调：有问不可迟答，无言切勿先声。该开口立刻开口，犹豫会被读成不自信。', tag: '攻' },
+  { n: 3, key: '敲打击审', title: '建立权威', body: '旁敲侧击套信息，突然发问击穿防线，审貌辨色做外推。目标是让他在仓促间吐露真话，并事后归因为"被看出来了"。', tag: '取' },
+  { n: 4, key: '千隆响卖', title: '驱动付费', body: '恐吓让他惧怕，抚慰让他看到出路，断言建立信心，摊牌完成收割。原文："先千后隆，无往不利。"', tag: '攻' },
+  { n: 5, key: '扎飞', title: '导向仪式', body: '恐惧已建立、需求已产生，此时引导他参加仪式，他不是被说服的，是主动的。承诺成本一旦付出，他就不会退出。', tag: '收' },
+  { n: 6, key: '长期维系', title: '持续榨取', body: '"因为命运与相术并不能验证，真的是呃人十年八年。"一次榨干不如长期产出——这是《阿宝篇》的核心经营逻辑。', tag: '取' },
+  { n: 7, key: '阿宝', title: '大额收割', body: '遇到有钱有势、但为人专横、势力单薄的"鳄鱼头"，启动最高规格骗局，类似今日之金光党。', tag: '收' },
+];
+---
+
+<div class="flow">
+  <ol class="flow-track">
+    {steps.map((s, i) => (
+      <li class="flow-step">
+        <button type="button" class="flow-btn" data-step={s.n} aria-expanded="false">
+          <span class="flow-n">{s.n}</span>
+          <span class="flow-key">{s.key}</span>
+          <span class="flow-tag">{s.tag}</span>
+        </button>
+        {i < steps.length - 1 && <span class="flow-arrow" aria-hidden="true"></span>}
+      </li>
+    ))}
+  </ol>
+
+  <div class="flow-panels">
+    {steps.map((s) => (
+      <div class="flow-panel" data-panel={s.n} hidden>
+        <div class="flow-panel-inner">
+          <h3>{s.title}</h3>
+          <p>{s.body}</p>
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.flow').forEach((flow) => {
+    const btns = flow.querySelectorAll<HTMLButtonElement>('.flow-btn');
+    const panels = flow.querySelectorAll<HTMLElement>('.flow-panel');
+    const show = (n: string) => {
+      btns.forEach((b) => b.setAttribute('aria-expanded', String(b.dataset.step === n)));
+      panels.forEach((p) => (p.hidden = p.dataset.panel !== n));
+    };
+    btns.forEach((b) =>
+      b.addEventListener('click', () => {
+        const n = b.dataset.step!;
+        const open = b.getAttribute('aria-expanded') === 'true';
+        if (open) {
+          btns.forEach((x) => x.setAttribute('aria-expanded', 'false'));
+          panels.forEach((p) => (p.hidden = true));
+        } else {
+          show(n);
+        }
+      })
+    );
+    show('1');
+  });
+</script>
