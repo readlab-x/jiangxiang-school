@@ -1,0 +1,69 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('manuscripts');
+  return entries.map((e) => ({ params: { slug: e.id }, props: { entry: e } }));
+}
+
+const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
+const all = (await getCollection('manuscripts')).sort((a, b) => a.data.order - b.data.order);
+const idx = all.findIndex((e) => e.id === entry.id);
+const prev = all[idx - 1];
+const next = all[idx + 1];
+const h2 = headings.filter((h) => h.depth === 2);
+---
+
+<Base title={`${entry.data.title} · 江相派秘本`} description={entry.data.summary}>
+  <div class="page-head">
+    <div class="wrap-narrow">
+      <p class="part-label">四本秘本 · 第 {entry.data.order} 篇</p>
+      <h1>{entry.data.title}</h1>
+      {entry.data.romanization && <p class="page-sub">{entry.data.romanization}</p>}
+      <p class="page-summary">{entry.data.summary}</p>
+      <dl class="meta-grid">
+        <div class="meta-box">
+          <dt>性质</dt>
+          <dd>{entry.data.nature}</dd>
+        </div>
+        <div class="meta-box">
+          <dt>传授</dt>
+          <dd>{entry.data.transmission}</dd>
+        </div>
+        <div class="meta-box">
+          <dt>现代解读</dt>
+          <dd>{entry.data.modernReading}</dd>
+        </div>
+      </dl>
+      <div class="footnote">
+        <strong>史料说明：</strong>{entry.data.sourceNote}
+      </div>
+    </div>
+  </div>
+
+  <article class="prose">
+    <div class="wrap-narrow">
+      {h2.length > 2 && (
+        <nav class="toc">
+          <div class="toc-title">本页目录</div>
+          <ol>
+            {h2.map((hd) => (
+              <li><a href={`#${hd.slug}`}>{hd.text}</a></li>
+            ))}
+          </ol>
+        </nav>
+      )}
+      <Content />
+      <div class="pager">
+        {prev ? (
+          <a href={`/manuscripts/${prev.id}/`}><span>← 上一篇</span>{prev.data.title}</a>
+        ) : <span></span>}
+        {next ? (
+          <a href={`/manuscripts/${next.id}/`} style="text-align:right"><span>下一篇 →</span>{next.data.title}</a>
+        ) : <span></span>}
+      </div>
+    </div>
+  </article>
+</Base>

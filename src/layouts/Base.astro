@@ -1,0 +1,49 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+  </head>
+  <body>
+    <header class="site-head">
+      <div class="wrap">
+        <a class="brand" href="/">江相派</a>
+        <nav class="site-nav">
+          <a href="/">首页</a>
+          <a href="/chapters/what-is/">介绍</a>
+          <a href="/manuscripts/">四本秘本</a>
+          <a href="/chapters/psychology/">骗局机制</a>
+          <a href="/chapters/defense/">防骗</a>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer class="site-foot">
+      <div class="wrap">
+        <strong>关于本站</strong>
+        本站是一个关于江相派的历史与机制科普项目。江相派是晚清民初活跃于广东一带的诈骗集团，
+        本站整理其组织结构、行骗流程与四本秘本，并从心理学角度解释其运作原理，
+        以便读者理解这类骗局在今天为何仍然有效。<br />
+        站内所引秘本原文均来自公开流传的转载版本，非正式出版物，异文难以尽校，引用时已尽量标注来源。
+      </div>
+    </footer>
+  </body>
+</html>

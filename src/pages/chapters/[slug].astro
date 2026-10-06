@@ -1,0 +1,53 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('chapters');
+  return entries.map((e) => ({ params: { slug: e.id }, props: { entry: e } }));
+}
+
+const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
+const all = (await getCollection('chapters')).sort((a, b) => a.data.order - b.data.order);
+const idx = all.findIndex((e) => e.id === entry.id);
+const prev = all[idx - 1];
+const next = all[idx + 1];
+const h2 = headings.filter((h) => h.depth === 2);
+---
+
+<Base title={`${entry.data.title} · 江相派`} description={entry.data.summary}>
+  <div class="page-head">
+    <div class="wrap-narrow">
+      <p class="part-label">{entry.data.part}</p>
+      <h1>{entry.data.title}</h1>
+      {entry.data.subtitle && <p class="page-sub">{entry.data.subtitle}</p>}
+      <p class="page-summary">{entry.data.summary}</p>
+      {entry.data.readingTime && <div class="hero-meta"><span>约 {entry.data.readingTime}</span></div>}
+    </div>
+  </div>
+
+  <article class="prose">
+    <div class="wrap-narrow">
+      {h2.length > 2 && (
+        <nav class="toc">
+          <div class="toc-title">本页目录</div>
+          <ol>
+            {h2.map((hd) => (
+              <li><a href={`#${hd.slug}`}>{hd.text}</a></li>
+            ))}
+          </ol>
+        </nav>
+      )}
+      <Content />
+      <div class="pager">
+        {prev ? (
+          <a href={`/chapters/${prev.id}/`}><span>← 上一篇</span>{prev.data.title}</a>
+        ) : <span></span>}
+        {next ? (
+          <a href={`/chapters/${next.id}/`} style="text-align:right"><span>下一篇 →</span>{next.data.title}</a>
+        ) : <span></span>}
+      </div>
+    </div>
+  </article>
+</Base>

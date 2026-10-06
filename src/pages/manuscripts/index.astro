@@ -1,0 +1,135 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+const manuscripts = (await getCollection('manuscripts')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<Base
+  title="四本秘本 · 江相派"
+  description="江相派四本骗术秘本：《英耀篇》《军马篇》《扎飞篇》《阿宝篇》。全文收录、逐句注释，并从心理学角度解读其运作机制。"
+>
+  <div class="page-head">
+    <div class="wrap">
+      <p class="part-label">二 · 四本秘本</p>
+      <h1>师门四卷</h1>
+      <p class="page-sub">法、术、仪、变——一套完整的作业系统</p>
+      <p class="page-summary">
+        江相派的"四本书"不是相学著作，是四本专门用于行骗的秘本。
+        它们各司其职：<strong>《英耀篇》</strong>是原理与总纲，<strong>《军马篇》</strong>是配套话术库，
+        <strong>《扎飞篇》</strong>是仪式技术，<strong>《阿宝篇》</strong>是变现方式与组织纪律。
+        读完这四本，你会明白这类骗局为什么能稳定运行两百年。
+      </p>
+    </div>
+  </div>
+
+  <article class="prose">
+    <div class="wrap">
+      <ul class="ms-grid">
+        {manuscripts.map((m) => (
+          <li>
+            <a class="ms-card" href={`/manuscripts/${m.id}/`}>
+              <h3>{m.data.title}</h3>
+              {m.data.romanization && <p class="ms-rom">{m.data.romanization}</p>}
+              <span class="ms-nature">{m.data.nature}</span>
+              <p>{m.data.summary}</p>
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <h2>四篇的关系</h2>
+      <p>
+        这四本不是并列关系，而是一条流水线上的四个环节。理解它们的分工，比逐篇阅读更重要。
+      </p>
+
+      <table>
+        <thead>
+          <tr><th>秘本</th><th>层级</th><th>解决的问题</th><th>核心产出</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><a href="/manuscripts/yingyao/">《英耀篇》</a></td>
+            <td>法（原理）</td>
+            <td>如何让目标自己吐露家底</td>
+            <td>六字真言：敲打击审千隆卖</td>
+          </tr>
+          <tr>
+            <td><a href="/manuscripts/junma/">《军马篇》</a></td>
+            <td>法（话术）</td>
+            <td>如何把原理变成具体台词</td>
+            <td>身份识别判据 + 话术模板</td>
+          </tr>
+          <tr>
+            <td><a href="/manuscripts/zhafei/">《扎飞篇》</a></td>
+            <td>术（仪式）</td>
+            <td>如何让目标跨过自我怀疑</td>
+            <td>承诺一致性机制</td>
+          </tr>
+          <tr>
+            <td><a href="/manuscripts/abao/">《阿宝篇》</a></td>
+            <td>大法（变现）</td>
+            <td>如何长期、可持续地获利</td>
+            <td>阿宝戒律：反竭泽而渔</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>史料分歧：本站在哪里</h2>
+      <p>关于这四篇的地位，各来源的表述存在冲突，本站如实记录：</p>
+
+      <table>
+        <thead>
+          <tr><th>来源</th><th>说法</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>维基百科《等级与秘传》</td>
+            <td>并列四篇为"法术经典"，各加简述</td>
+          </tr>
+          <tr>
+            <td>维基百科「师门三宝」表述</td>
+            <td>三宝指英耀、扎飞、阿宝；军马篇另列，为"一套专业术语"</td>
+          </tr>
+          <tr>
+            <td>博客园所录</td>
+            <td>"指其英耀篇、扎飞篇、阿宝篇为师门三宝"，并称军马篇"是《英耀篇》的绝配"</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>
+        <strong>注意一个关键点：各来源对文本内容的描述基本一致，冲突只在归类。</strong>
+        这提示军马篇可能本就是英耀篇的附卷，后世因流传需要才独立成名。
+        本站采用四篇并列说（维基说），但保留分歧记录，不掩盖史料的不确定性。
+      </p>
+
+      <div class="note">
+        <strong>另一个缺口：</strong>
+        《扎飞篇》据传分三部分——拜神法则、祈禳仪式、师门心法。
+        但公开流传的抄本基本只保留了第一部分，仪式细节与"上一辈舞神弄鬼的具体做法"
+        几乎不可得。**我们能看到的江相派，是被过滤过的版本。**
+      </div>
+
+      <h2>怎么读这四本</h2>
+      <p>
+        建议按顺序读，但每篇的读法不同：
+      </p>
+      <ul>
+        <li><strong>《英耀篇》</strong>——读原文，然后逐字对照"六字真言"的现代解释。这是全站的核心。</li>
+        <li><strong>《军马篇》</strong>——重点看"论问答"部分，忽略"论命运"的韵文。它们的功能不同。</li>
+        <li><strong>《扎飞篇》</strong>——最短，但密度最高。注意它自陈底牌的那两句。</li>
+        <li><strong>《阿宝篇》</strong>——最有商业价值。"阿宝戒律"本质是一套反竭泽而渔的经营准则。</li>
+      </ul>
+
+      <div class="callout">
+        <div class="callout-title">一个提醒</div>
+        <p>
+          这四本秘本之所以能流传，靠的是全篇黑话——以简写替代实义，外人读来如读天书。
+          本站保留原文黑话并逐句注释，是因为<strong>黑话的冲击力是理解这套体系的关键</strong>：
+          "千隆响卖""老衬""一哥"这些词的粗粝感，翻译成普通话后会完全失效。
+        </p>
+      </div>
+    </div>
+  </article>
+</Base>
