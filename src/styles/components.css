@@ -349,3 +349,14 @@
   .mech-body { padding-left: 4px; }
   .mech-term { font-size: 18px; }
 }
+
+.part-nav { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; }
+.part-nav a {
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 4px 12px;
+}
+.part-nav a:hover { text-decoration: none; border-color: var(--accent); color: var(--accent); }

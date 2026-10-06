@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import { bookSegments, segmentMeta } from '../data/segments';
+import { bookSegments, segmentMeta, bookOrder, subParts } from '../data/segments';
 
 export function getStaticPaths() {
   return Object.keys(segmentMeta).map((slug) => ({ params: { slug } }));
@@ -9,13 +9,14 @@ export function getStaticPaths() {
 const { slug } = Astro.params as { slug: string };
 const meta = segmentMeta[slug];
 const segments = bookSegments[slug];
-const order = ['yingyao', 'junma', 'zhafei', 'abao'];
-const i = order.indexOf(slug);
-const prevSlug = order[i - 1];
-const nextSlug = order[i + 1];
+const i = bookOrder.indexOf(slug);
+const prevSlug = bookOrder[i - 1];
+const nextSlug = bookOrder[i + 1];
+const parts = subParts[slug] ?? [];
+const tags = [...new Set(segments.map((s) => s.tag).filter(Boolean))] as string[];
 ---
 
-<Base title={`${meta.title} 原文与注解 · 江相派`} description={`${meta.title}（${meta.romanization}）逐段原文与注解。`}>
+<Base title={`${meta.title} 原文与注解 · 江相派`} description={`${meta.title}（${meta.romanization}）全文 ${segments.length} 段，逐段原文与注解。`}>
   <div class="ms-head">
     <div class="wrap">
       <p class="part-label">四本秘本 · {meta.role}</p>
@@ -23,7 +24,15 @@ const nextSlug = order[i + 1];
         <h1>{meta.title}</h1>
         <span class="ms-nature">{meta.nature}</span>
       </div>
-      <p class="ms-rom">{meta.romanization}</p>
+      <p class="ms-rom">{meta.romanization} · 全文 {segments.length} 段</p>
+      {parts.length > 0 && (
+        <nav class="part-nav">
+          {parts.map((p) => {
+            const first = segments.find((s) => s.tag === p);
+            return first ? <a href={`#seg-${first.no}`}>{p}</a> : null;
+          })}
+        </nav>
+      )}
     </div>
   </div>
 
