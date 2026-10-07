@@ -90,12 +90,12 @@ for (const s of segments) {
 
       <div class="pager">
         {prevSlug ? (
-          <a href={`/${prevSlug}/`}><span>← 上一篇</span>{segmentMeta[prevSlug].title}</a>
+          <a href={`${import.meta.env.BASE_URL}${prevSlug}/`}><span>← 上一篇</span>{segmentMeta[prevSlug].title}</a>
         ) : <span></span>}
         {nextSlug ? (
-          <a href={`/${nextSlug}/`} style="text-align:right"><span>下一篇 →</span>{segmentMeta[nextSlug].title}</a>
+          <a href={`${import.meta.env.BASE_URL}${nextSlug}/`} style="text-align:right"><span>下一篇 →</span>{segmentMeta[nextSlug].title}</a>
         ) : (
-          <a href="/manuscripts/" style="text-align:right"><span>全部 →</span>四本秘本总览</a>
+          <a href="{import.meta.env.BASE_URL}manuscripts/" style="text-align:right"><span>全部 →</span>四本秘本总览</a>
         )}
       </div>
     </div>
