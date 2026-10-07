@@ -12,9 +12,17 @@ total = 0
 for f in files:
     s = io.open(f, encoding='utf-8').read()
     texts = re.findall(r"text: '(.+?)',\n    note:", s, re.S)
-    nos = [int(x) for x in re.findall(r'no: (\d+)', s)]
     total += len(texts)
-    print('===', f, '段数', len(texts), '编号连续' if nos == list(range(1, len(nos)+1)) else f'编号异常{nos}')
+    # 一个文件可能含多个数组（zhafei-abao.ts），按 1 重新计数分段判断
+    nos_all = [int(x) for x in re.findall(r'no: (\d+)', s)]
+    segs, cur = [], []
+    for n in nos_all:
+        if n == 1 and cur:
+            segs.append(cur); cur = []
+        cur.append(n)
+    if cur: segs.append(cur)
+    ok = all(sg == list(range(1, len(sg)+1)) for sg in segs)
+    print('===', f, '段数', len(texts), f'编号连续（{len(segs)} 组）' if ok else f'编号异常{segs}')
 
     for i, t in enumerate(texts, 1):
         # 繁体残留
