@@ -12,47 +12,76 @@ const segments = bookSegments[slug];
 const i = bookOrder.indexOf(slug);
 const prevSlug = bookOrder[i - 1];
 const nextSlug = bookOrder[i + 1];
-const parts = subParts[slug] ?? [];
-const tags = [...new Set(segments.map((s) => s.tag).filter(Boolean))] as string[];
+
+// 按 tag 分组，保留原始顺序
+const groups: { tag: string; items: typeof segments }[] = [];
+for (const s of segments) {
+  const t = s.tag ?? '正文';
+  let g = groups.find((x) => x.tag === t);
+  if (!g) {
+    g = { tag: t, items: [] };
+    groups.push(g);
+  }
+  g.items.push(s);
+}
 ---
 
-<Base title={`${meta.title} 原文与注解 · 江相派`} description={`${meta.title}（${meta.romanization}）全文 ${segments.length} 段，逐段原文与注解。`}>
+<Base title={`${meta.title} 原文与注解 · 江相派`} description={`${meta.title}（${meta.romanization}）全文 ${segments.length} 段，逐段原文、译文与注解。`}>
   <div class="ms-head">
-    <div class="wrap">
+    <div class="wrap-wide">
       <p class="part-label">四本秘本 · {meta.role}</p>
       <div class="ms-head-row">
         <h1>{meta.title}</h1>
         <span class="ms-nature">{meta.nature}</span>
       </div>
       <p class="ms-rom">{meta.romanization} · 全文 {segments.length} 段</p>
-      {parts.length > 0 && (
-        <nav class="part-nav">
-          {parts.map((p) => {
-            const first = segments.find((s) => s.tag === p);
-            return first ? <a href={`#seg-${first.no}`}>{p}</a> : null;
-          })}
-        </nav>
-      )}
     </div>
   </div>
 
-  <article class="ms-body">
-    <div class="wrap">
-      <ol class="seg-list">
-        {segments.map((s) => (
-          <li class="seg" id={`seg-${s.no}`}>
-            <div class="seg-no">{String(s.no).padStart(2, '0')}</div>
-            <div class="seg-main">
-              <blockquote class="seg-text">{s.text}</blockquote>
-              {s.tag && <span class="seg-tag">{s.tag}</span>}
-              <div class="seg-note">
-                <span class="seg-note-label">注解</span>
+  <div class="reader">
+    <aside class="rd-side">
+      <div class="rd-side-inner">
+        <div class="rd-side-title">目录</div>
+        {groups.map((g, gi) => (
+          <div class="rd-group">
+            <a class="rd-group-title" href={`#g-${gi}`}>{g.tag}</a>
+            <ol>
+              {g.items.map((s) => (
+                <li><a href={`#seg-${s.no}`}>{s.no}</a></li>
+              ))}
+            </ol>
+          </div>
+        ))}
+      </div>
+    </aside>
+
+    <div class="rd-flow">
+      {groups.map((g, gi) => (
+        <>
+          <h2 class="rd-sec-title" id={`g-${gi}`}>
+            <span>{g.tag}</span>
+            <span class="rd-sec-count">{g.items.length} 段</span>
+          </h2>
+          {g.items.map((s) => (
+            <article class="rd-row" id={`seg-${s.no}`}>
+              <div class="rd-no">{String(s.no).padStart(2, '0')}</div>
+              <div class="rd-orig">
+                <blockquote class="rd-text">{s.text}</blockquote>
+                {s.trans && (
+                  <p class="rd-trans">
+                    <span class="rd-trans-label">译文</span>
+                    {s.trans}
+                  </p>
+                )}
+              </div>
+              <div class="rd-note">
+                <span class="rd-note-label">注解</span>
                 <p set:html={s.note.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')} />
               </div>
-            </div>
-          </li>
-        ))}
-      </ol>
+            </article>
+          ))}
+        </>
+      ))}
 
       <div class="pager">
         {prevSlug ? (
@@ -65,5 +94,5 @@ const tags = [...new Set(segments.map((s) => s.tag).filter(Boolean))] as string[
         )}
       </div>
     </div>
-  </article>
+  </div>
 </Base>

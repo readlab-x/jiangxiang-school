@@ -1,6 +1,7 @@
 export interface Segment {
   no: number;
   text: string;
+  trans?: string;
   note: string;
   tag?: string;
 }
