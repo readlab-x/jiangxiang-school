@@ -86,17 +86,6 @@
   line-height: 1.85;
   color: var(--ink-faint);
 }
-.rd-trans-label {
-  display: inline;
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  color: var(--note);
-  background: var(--note-soft);
-  margin-right: 8px;
-  padding: 1px 6px;
-  border-radius: 3px;
-  vertical-align: 2px;
-}
 .rd-note-label {
   display: block;
   font-size: 10.5px; letter-spacing: 0.14em;
