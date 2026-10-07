@@ -1,21 +1,73 @@
+/* 方案 B：双色分工
+   朱红 = 原文/强调（链接、分节标题、原文标记）
+   靛蓝 = 注解（右栏注解栏、译文标签）
+   赭石 = 引文标记（仅剩的第三色，低饱和）
+   其余全部中性，靠位置和字号区分而非颜色 */
+
 :root {
+  color-scheme: light;
   --ink: #1c1b19;
   --ink-soft: #57534e;
   --ink-faint: #8a857f;
   --paper: #faf8f4;
   --card: #ffffff;
+  --head-bg: #ffffff;
   --line: #e4dfd6;
+  --th-bg: #f2efe8;
+  --code-bg: #f0ece3;
+  --note-bg: #f4f1ea;
+
   --accent: #9a2b1e;
   --accent-soft: #f5e8e4;
-  --violet: #4c3f9e;
-  --violet-soft: #eceaf9;
-  --teal: #0f6e56;
-  --teal-soft: #e3f2ec;
-  --amber: #8a5a0b;
-  --amber-soft: #faf0dd;
+  --accent-line: #e8d5d0;
+
+  --note: #2c5282;
+  --note-soft: #e6ecf4;
+  --note-line: #cbd8e8;
+
+  --mark: #b8863a;
+  --mark-soft: #f7f0e2;
+
+  --pre-bg: #2a2825;
+  --pre-ink: #e8e4dc;
+  --on-ink: #faf8f4;
+  --btn-ink: #726d66;
+
   --serif: "Songti SC", "Noto Serif SC", "Source Han Serif SC", Georgia, serif;
   --sans: -apple-system, "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
   --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+}
+
+/* 暗色：降饱和而非提饱和。
+   强调色饱和度从 0.81 降到 0.46，退回背景层，不与正文争抢。 */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --ink: #ddd9d1;
+  --ink-soft: #9a958c;
+  --ink-faint: #6f6b64;
+  --paper: #15171a;
+  --card: #1c1f23;
+  --head-bg: #191c20;
+  --line: #282c32;
+  --th-bg: #212429;
+  --code-bg: #23262b;
+  --note-bg: #1f2227;
+
+  --accent: #c07a68;
+  --accent-soft: #3a2a24;
+  --accent-line: #4a332c;
+
+  --note: #7d9cc4;
+  --note-soft: #1c2430;
+  --note-line: #2e3d52;
+
+  --mark: #9c8055;
+  --mark-soft: #282319;
+
+  --pre-bg: #101215;
+  --pre-ink: #cfcbc3;
+  --on-ink: #15171a;
+  --btn-ink: #8d8880;
 }
 
 * { box-sizing: border-box; }
@@ -42,7 +94,7 @@ a:hover { text-decoration: underline; }
 
 .site-head {
   border-bottom: 1px solid var(--line);
-  background: var(--card);
+  background: var(--head-bg);
   position: sticky;
   top: 0;
   z-index: 20;
@@ -50,9 +102,12 @@ a:hover { text-decoration: underline; }
 .site-head .wrap {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 20px;
   height: 62px;
 }
+.head-row { max-width: 1180px; }
+.head-right { margin-left: auto; flex-shrink: 0; }
+.site-nav { display: flex; gap: 22px; font-size: 14px; flex: 1; }
 .brand {
   font-family: var(--serif);
   font-size: 19px;
@@ -61,7 +116,6 @@ a:hover { text-decoration: underline; }
   letter-spacing: 0.06em;
 }
 .brand:hover { text-decoration: none; color: var(--accent); }
-.site-nav { display: flex; gap: 22px; font-size: 14px; }
 .site-nav a { color: var(--ink-soft); }
 .site-nav a:hover { color: var(--accent); text-decoration: none; }
 .site-nav a[aria-current="page"] { color: var(--accent); font-weight: 500; }
@@ -139,13 +193,13 @@ a:hover { text-decoration: underline; }
 .ms-card {
   background: var(--card);
   border: 1px solid var(--line);
-  border-left: 3px solid var(--violet);
+  border-left: 3px solid var(--accent);
   border-radius: 10px;
   padding: 24px;
   display: block;
   color: inherit;
 }
-.ms-card:hover { text-decoration: none; border-color: var(--ink-faint); border-left-color: var(--violet); }
+.ms-card:hover { text-decoration: none; border-color: var(--ink-faint); border-left-color: var(--accent); }
 .ms-card h3 { margin: 0 0 4px; font-family: var(--serif); font-size: 22px; font-weight: 600; }
 .ms-rom { font-family: var(--mono); font-size: 12px; color: var(--ink-faint); margin: 0 0 12px; }
 .ms-nature {
@@ -154,7 +208,7 @@ a:hover { text-decoration: underline; }
   padding: 3px 10px;
   border-radius: 20px;
   background: var(--violet-soft);
-  color: var(--violet);
+  color: var(--accent);
   margin-bottom: 12px;
 }
 .ms-card p { margin: 0; font-size: 14.5px; color: var(--ink-soft); line-height: 1.75; }
@@ -187,7 +241,7 @@ a:hover { text-decoration: underline; }
   margin: 28px 0;
   padding: 22px 26px;
   background: var(--card);
-  border-left: 3px solid var(--amber);
+  border-left: 3px solid var(--mark);
   border-radius: 0 8px 8px 0;
   font-family: var(--serif);
   font-size: 16.5px;
@@ -208,7 +262,7 @@ a:hover { text-decoration: underline; }
 .prose th {
   text-align: left;
   padding: 12px 14px;
-  background: #f2efe8;
+  background: var(--th-bg);
   font-weight: 600;
   border-bottom: 1px solid var(--line);
   font-size: 14px;
@@ -219,13 +273,13 @@ a:hover { text-decoration: underline; }
 .prose code {
   font-family: var(--mono);
   font-size: 0.88em;
-  background: #f0ece3;
+  background: var(--code-bg);
   padding: 2px 6px;
   border-radius: 4px;
 }
 .prose pre {
-  background: #2a2825;
-  color: #e8e4dc;
+  background: var(--pre-bg);
+  color: var(--pre-ink);
   padding: 20px 22px;
   border-radius: 8px;
   overflow-x: auto;
@@ -300,7 +354,7 @@ a:hover { text-decoration: underline; }
   font-size: 14.5px;
   line-height: 1.8;
 }
-.note strong { color: var(--amber); }
+.note strong { color: var(--mark); }
 
 .callout {
   background: var(--teal-soft);
@@ -313,7 +367,7 @@ a:hover { text-decoration: underline; }
 }
 .callout-title {
   font-weight: 600;
-  color: var(--teal);
+  color: var(--note);
   margin-bottom: 8px;
   font-size: 15px;
 }
@@ -346,7 +400,7 @@ a:hover { text-decoration: underline; }
   font-size: 13.5px;
   color: var(--ink-faint);
   padding: 14px 18px;
-  background: #f4f1ea;
+  background: var(--note-bg);
   border-radius: 8px;
   margin: 24px 0;
   line-height: 1.8;

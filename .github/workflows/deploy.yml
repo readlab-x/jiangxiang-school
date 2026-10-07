@@ -1,0 +1,58 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [master]
+  # 手动触发
+  workflow_dispatch:
+
+# 允许写入权限，部署需要
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 并发部署：新提交取消旧的未完成部署
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: 安装依赖
+        run: npm ci
+
+      - name: 构建
+        run: npm run build
+
+      - name: 校验 SEO 产物
+        run: |
+          test -f dist/og.png || (echo "缺少 og.png" && exit 1)
+          test -f dist/sitemap-index.xml || (echo "缺少 sitemap" && exit 1)
+          test -f dist/robots.txt || (echo "缺少 robots.txt" && exit 1)
+          grep -q 'rel="canonical"' dist/index.html || (echo "缺少 canonical" && exit 1)
+          echo "SEO 产物检查通过"
+
+      - name: 上传构建产物
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

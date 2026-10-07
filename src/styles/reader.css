@@ -35,7 +35,7 @@
 
 .rd-side-title { font-size: 11.5px; letter-spacing: 0.14em; color: var(--ink-faint); margin-bottom: 14px; }
 .rd-group { margin-bottom: 15px; }
-.rd-group-title { display: block; font-size: 12.5px; color: var(--violet); font-weight: 500; margin-bottom: 5px; }
+.rd-group-title { display: block; font-size: 12.5px; color: var(--accent); font-weight: 500; margin-bottom: 5px; }
 .rd-group-title:hover { text-decoration: none; color: var(--accent); }
 .rd-group ol { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 3px; }
 .rd-group li a {
@@ -90,19 +90,19 @@
   display: inline;
   font-size: 11px;
   letter-spacing: 0.1em;
-  color: var(--ink-faint);
+  color: var(--note);
+  background: var(--note-soft);
   margin-right: 8px;
   padding: 1px 6px;
-  border: 0.5px solid var(--line);
   border-radius: 3px;
   vertical-align: 2px;
 }
 .rd-note-label {
   display: block;
   font-size: 10.5px; letter-spacing: 0.14em;
-  color: var(--ink-faint);
+  color: var(--note);
   padding-bottom: 6px; margin-bottom: 8px;
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid var(--note-line);
 }
 .rd-note p { margin: 0; font-size: 13.5px; line-height: 1.9; color: var(--ink-soft); }
 .rd-note strong { color: var(--ink); font-weight: 600; }

@@ -2,30 +2,80 @@
 import '../styles/global.css';
 import '../styles/components.css';
 import '../styles/reader.css';
+import ThemeSwitch from '../components/ThemeSwitch.astro';
+import { themeBootstrap } from '../scripts/theme';
 
 interface Props {
   title: string;
   description: string;
+  /** 页面类型，默认 website */
+  ogType?: string;
+  /** 是否为四本秘本之一（用于结构化数据标记） */
+  book?: { name: string; alternateName: string };
 }
 
-const { title, description } = Astro.props;
+const { title, description, ogType = 'website', book } = Astro.props;
+
+const SITE = '江相派';
+const ORIGIN = 'https://jiangxiang-school.pages.dev';
+const canonical = new URL(Astro.url.pathname, ORIGIN).href;
+const ogImage = new URL('/og.png', ORIGIN).href;
 ---
 
 <!doctype html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="light" data-theme-pref="system">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <!-- 图标 -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#faf8f4" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#15171a" media="(prefers-color-scheme: dark)" />
+
+    <!-- Open Graph -->
+    <meta property="og:site_name" content={SITE} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:locale" content="zh_CN" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${SITE} · 江湖上的宰相`} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <script is:inline set:html={themeBootstrap} />
+
+    {book && (
+      <script type="application/ld+json" set:html={JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'Book',
+        name: book.name,
+        alternateName: book.alternateName,
+        inLanguage: 'zh-CN',
+        description,
+        url: canonical,
+        isPartOf: { '@type': 'WebSite', name: SITE, url: ORIGIN },
+      })} />
+    )}
   </head>
   <body>
     <header class="site-head">
-      <div class="wrap">
-        <a class="brand" href="/">江相派</a>
+      <div class="wrap head-row">
+        <a class="brand" href="/">{SITE}</a>
         <nav class="site-nav">
           <a href="/">介绍</a>
           <a href="/yingyao/">英耀篇</a>
@@ -34,6 +84,9 @@ const { title, description } = Astro.props;
           <a href="/abao/">阿宝篇</a>
           <a href="/mechanism/">骗局机制</a>
         </nav>
+        <div class="head-right">
+          <ThemeSwitch />
+        </div>
       </div>
     </header>
     <main>
@@ -48,5 +101,45 @@ const { title, description } = Astro.props;
         站内所引秘本原文均来自公开流传的转载版本，非正式出版物，异文难以尽校，引用时已尽量标注来源。
       </div>
     </footer>
+
+    <script is:inline>
+      (function () {
+        var key = 'jiangxiang-theme';
+        var root = document.documentElement;
+        var media = window.matchMedia('(prefers-color-scheme: dark)');
+
+        var apply = function (pref) {
+          var dark = pref === 'dark' || (pref === 'system' && media.matches);
+          root.dataset.theme = dark ? 'dark' : 'light';
+          root.dataset.themePref = pref;
+          document.querySelectorAll('[data-theme-choice]').forEach(function (b) {
+            var on = b.dataset.themeChoice === pref;
+            b.dataset.active = String(on);
+            b.setAttribute('aria-pressed', String(on));
+          });
+        };
+
+        var stored;
+        try {
+          stored = localStorage.getItem(key);
+        } catch (e) {}
+        apply(stored === 'light' || stored === 'dark' || stored === 'system' ? stored : 'system');
+
+        document.querySelectorAll('[data-theme-choice]').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var pref = btn.dataset.themeChoice;
+            try {
+              localStorage.setItem(key, pref);
+            } catch (e) {}
+            apply(pref);
+          });
+        });
+
+        media.addEventListener('change', function () {
+          var pref = root.dataset.themePref;
+          if (!pref || pref === 'system') apply('system');
+        });
+      })();
+    </script>
   </body>
 </html>
