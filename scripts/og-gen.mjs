@@ -22,9 +22,8 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
 
   <g transform="translate(90, 150)">
     <rect width="72" height="72" rx="16" fill="#ffffff" stroke="#e4dfd6" stroke-width="1.5"/>
-    <g stroke="#9a2b1e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none" transform="translate(36,36) scale(2.1) translate(-16,-16)">
-      <path d="M2.5 16s3.6-6.4 13.5-6.4S29.5 16 29.5 16s-3.6 6.4-13.5 6.4S2.5 16 2.5 16Z"/>
-      <circle cx="16" cy="16" r="2.9"/>
+    <g stroke="#9a2b1e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" fill="none" transform="translate(8,8) scale(2.3333)">
+      <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/>
     </g>
   </g>
 
