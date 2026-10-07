@@ -4,6 +4,7 @@ import FlowChart from '../components/FlowChart.astro';
 import SixWords from '../components/SixWords.astro';
 import SlangTable from '../components/SlangTable.astro';
 import { bookSegments, segmentMeta } from '../data/segments';
+import { withBase } from '../utils/paths';
 
 const books = ['yingyao', 'junma', 'zhafei', 'abao'].map((slug) => ({
   slug,
@@ -60,7 +61,7 @@ const lineage = [
       <ul class="book-grid">
         {books.map((b) => (
           <li>
-            <a class="book-card" href={`${import.meta.env.BASE_URL}${b.slug}/`}>
+            <a class="book-card" href={withBase(b.slug + '/')}>
               <div class="book-card-top">
                 <span class="book-role">{b.role}</span>
                 <span class="book-count">{b.count} 段</span>
@@ -208,7 +209,7 @@ const lineage = [
       </ul>
 
       <p style="margin-top:32px">
-        <a class="more-link" href="{import.meta.env.BASE_URL}mechanism/">展开阅读：为什么会相信 · 完整机制与原文对照 →</a>
+        <a class="more-link" href={withBase('mechanism/')}>展开阅读：为什么会相信 · 完整机制与原文对照 →</a>
       </p>
     </div>
   </section>

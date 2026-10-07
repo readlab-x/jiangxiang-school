@@ -44,13 +44,17 @@ jobs:
       - name: 构建
         run: npm run build
 
-      - name: 校验 SEO 产物
+      - name: 校验 SEO 与 base 路径
         run: |
           test -f dist/og.png || (echo "缺少 og.png" && exit 1)
           test -f dist/sitemap-index.xml || (echo "缺少 sitemap" && exit 1)
           test -f dist/robots.txt || (echo "缺少 robots.txt" && exit 1)
           grep -q 'rel="canonical"' dist/index.html || (echo "缺少 canonical" && exit 1)
           echo "SEO 产物检查通过"
+
+      # 防止子路径部署的链接回归：href="{import.meta.env.BASE_URL}x" 不会求值
+      - name: 校验 base 路径
+        run: node scripts/check-base.mjs
 
       - name: 上传构建产物
         uses: actions/upload-pages-artifact@v5

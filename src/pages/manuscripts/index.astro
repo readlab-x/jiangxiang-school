@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { bookSegments, segmentMeta } from '../../data/segments';
+import { withBase } from '../../utils/paths';
 
 const order = ['yingyao', 'junma', 'zhafei', 'abao'];
 const books = order.map((slug) => ({ slug, ...segmentMeta[slug], count: bookSegments[slug].length }));
@@ -29,7 +30,7 @@ const books = order.map((slug) => ({ slug, ...segmentMeta[slug], count: bookSegm
       <ul class="ms-grid">
         {books.map((b) => (
           <li>
-            <a class="ms-card" href={`${import.meta.env.BASE_URL}${b.slug}/`}>
+            <a class="ms-card" href={withBase(b.slug + '/')}>
               <h3>{b.title}</h3>
               <p class="ms-rom">{b.romanization}</p>
               <span class="ms-nature">{b.role} · {b.count} 段</span>
@@ -50,25 +51,25 @@ const books = order.map((slug) => ({ slug, ...segmentMeta[slug], count: bookSegm
         </thead>
         <tbody>
           <tr>
-            <td><a href="{import.meta.env.BASE_URL}yingyao/">《英耀篇》</a></td>
+            <td><a href={withBase('yingyao/')}>《英耀篇》</a></td>
             <td>法（原理）</td>
             <td>如何让目标自己吐露家底</td>
             <td>六字真言：敲打击审千隆卖</td>
           </tr>
           <tr>
-            <td><a href="{import.meta.env.BASE_URL}junma/">《军马篇》</a></td>
+            <td><a href={withBase('junma/')}>《军马篇》</a></td>
             <td>法（话术）</td>
             <td>如何把原理变成具体台词</td>
             <td>身份识别判据 + 话术模板</td>
           </tr>
           <tr>
-            <td><a href="{import.meta.env.BASE_URL}zhafei/">《扎飞篇》</a></td>
+            <td><a href={withBase('zhafei/')}>《扎飞篇》</a></td>
             <td>术（仪式）</td>
             <td>如何让目标跨过自我怀疑</td>
             <td>承诺一致性机制</td>
           </tr>
           <tr>
-            <td><a href="{import.meta.env.BASE_URL}abao/">《阿宝篇》</a></td>
+            <td><a href={withBase('abao/')}>《阿宝篇》</a></td>
             <td>大法（变现）</td>
             <td>如何长期、可持续地获利</td>
             <td>阿宝戒律：反竭泽而渔</td>

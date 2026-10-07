@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { bookSegments, segmentMeta, bookOrder, subParts } from '../data/segments';
+import { withBase } from '../utils/paths';
 
 export function getStaticPaths() {
   return Object.keys(segmentMeta).map((slug) => ({ params: { slug } }));
@@ -90,12 +91,12 @@ for (const s of segments) {
 
       <div class="pager">
         {prevSlug ? (
-          <a href={`${import.meta.env.BASE_URL}${prevSlug}/`}><span>← 上一篇</span>{segmentMeta[prevSlug].title}</a>
+          <a href={withBase(prevSlug + '/')}><span>← 上一篇</span>{segmentMeta[prevSlug].title}</a>
         ) : <span></span>}
         {nextSlug ? (
-          <a href={`${import.meta.env.BASE_URL}${nextSlug}/`} style="text-align:right"><span>下一篇 →</span>{segmentMeta[nextSlug].title}</a>
+          <a href={withBase(nextSlug + '/')} style="text-align:right"><span>下一篇 →</span>{segmentMeta[nextSlug].title}</a>
         ) : (
-          <a href="{import.meta.env.BASE_URL}manuscripts/" style="text-align:right"><span>全部 →</span>四本秘本总览</a>
+          <a href={withBase('manuscripts/')} style="text-align:right"><span>全部 →</span>四本秘本总览</a>
         )}
       </div>
     </div>
