@@ -62,8 +62,8 @@ const words = [
   </div>
 
   <div class="six-stage">
-    {words.map((w, i) => (
-      <div class="six-panel" data-word={w.ch} hidden={i !== 0}>
+    {words.map((w) => (
+      <div class="six-panel" data-word={w.ch} hidden>
         <div class="six-char">{w.ch}</div>
         <div class="six-body">
           <h3>{w.gloss}</h3>
@@ -83,14 +83,17 @@ const words = [
 
 <script>
   document.querySelectorAll<HTMLElement>('.six').forEach((el) => {
-    const tabs = el.querySelectorAll<HTMLButtonElement>('.six-tab');
-    const panels = el.querySelectorAll<HTMLElement>('.six-panel');
-    tabs.forEach((t) =>
-      t.addEventListener('click', () => {
-        const k = t.dataset.word!;
-        tabs.forEach((x) => x.setAttribute('aria-selected', String(x === t)));
-        panels.forEach((p) => (p.hidden = p.dataset.word !== k));
-      })
-    );
+    const tabs = Array.from(el.querySelectorAll<HTMLButtonElement>('.six-tab'));
+    const panels = Array.from(el.querySelectorAll<HTMLElement>('.six-panel'));
+
+    const show = (k: string) => {
+      tabs.forEach((t) => t.setAttribute('aria-selected', String(t.dataset.word === k)));
+      panels.forEach((p) => (p.hidden = p.dataset.word !== k));
+    };
+
+    tabs.forEach((t) => t.addEventListener('click', () => show(t.dataset.word!)));
+
+    // 初始显示第一个字
+    if (tabs.length) show(tabs[0].dataset.word!);
   });
 </script>

@@ -27,7 +27,7 @@ import { mechanisms } from '../data/mechanisms';
       <ul class="mech-acc">
         {mechanisms.map((m, i) => (
           <li class="mech-item">
-            <button type="button" class="mech-head" aria-expanded={i === 0 ? 'true' : 'false'}>
+            <button type="button" class="mech-head" aria-expanded="false">
               <span class="mech-no">{String(i + 1).padStart(2, '0')}</span>
               <span class="mech-names">
                 <span class="mech-term">{m.term}</span>
@@ -35,7 +35,7 @@ import { mechanisms } from '../data/mechanisms';
               </span>
               <span class="mech-caret" aria-hidden="true"></span>
             </button>
-            <div class="mech-body" hidden={i !== 0}>
+            <div class="mech-body" hidden>
               <div class="mech-orig">
                 <span class="mech-label">江相派原文</span>
                 <p>{m.original}</p>
@@ -69,7 +69,8 @@ import { mechanisms } from '../data/mechanisms';
 </Base>
 
 <script>
-  document.querySelectorAll<HTMLElement>('.mech-item').forEach((item) => {
+  const items = Array.from(document.querySelectorAll<HTMLElement>('.mech-item'));
+  items.forEach((item) => {
     const btn = item.querySelector<HTMLButtonElement>('.mech-head')!;
     const body = item.querySelector<HTMLElement>('.mech-body')!;
     btn.addEventListener('click', () => {
@@ -78,4 +79,9 @@ import { mechanisms } from '../data/mechanisms';
       body.hidden = open;
     });
   });
+  // 默认展开第一条
+  if (items.length) {
+    items[0].querySelector<HTMLButtonElement>('.mech-head')!.setAttribute('aria-expanded', 'true');
+    items[0].querySelector<HTMLElement>('.mech-body')!.hidden = false;
+  }
 </script>

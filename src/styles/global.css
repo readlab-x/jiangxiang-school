@@ -33,6 +33,10 @@ body {
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
+/* 任何显式 display 都会盖掉 hidden 属性的默认 display:none，这里统一兜底。
+   没有这条，.six-panel{display:grid} 会让所有 tab 面板同时可见。 */
+[hidden] { display: none !important; }
+
 .wrap { max-width: 860px; margin: 0 auto; padding: 0 24px; }
 .wrap-narrow { max-width: 700px; margin: 0 auto; padding: 0 24px; }
 

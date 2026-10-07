@@ -63,8 +63,8 @@ for (const s of segments) {
             <span class="rd-sec-count">{g.items.length} 段</span>
           </h2>
           {g.items.map((s) => (
-            <article class="rd-row" id={`seg-${s.no}`}>
-              <div class="rd-no">{String(s.no).padStart(2, '0')}</div>
+            <>
+              <div class="rd-no" id={`seg-${s.no}`}>{String(s.no).padStart(2, '0')}</div>
               <div class="rd-orig">
                 <blockquote class="rd-text">{s.text}</blockquote>
                 {s.trans && (
@@ -78,7 +78,7 @@ for (const s of segments) {
                 <span class="rd-note-label">注解</span>
                 <p set:html={s.note.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')} />
               </div>
-            </article>
+            </>
           ))}
         </>
       ))}

@@ -11,9 +11,9 @@
 
 .reader {
   display: grid;
-  grid-template-columns: 158px minmax(0, 1fr) 292px;
-  column-gap: 30px;
-  max-width: 1200px;
+  grid-template-columns: 150px 30px minmax(0, 1fr) 300px;
+  column-gap: 0;
+  max-width: 1240px;
   margin: 0 auto;
   padding: 0 28px;
   align-items: start;
@@ -22,13 +22,13 @@
 /* 左栏：目录（sticky） */
 .rd-side {
   grid-column: 1;
+  grid-row: 1 / span 999;
   position: sticky;
   top: 62px;
   max-height: calc(100vh - 62px);
   overflow-y: auto;
-  padding: 28px 0 40px;
+  padding: 28px 16px 40px 0;
   border-right: 1px solid var(--line);
-  padding-right: 16px;
 }
 .rd-side::-webkit-scrollbar { width: 4px; }
 .rd-side::-webkit-scrollbar-thumb { background: var(--line); border-radius: 2px; }
@@ -45,66 +45,57 @@
 }
 .rd-group li a:hover { background: var(--accent-soft); color: var(--accent); text-decoration: none; }
 
-/* 中栏 + 右栏：同一个 grid，靠内容流让注解落在第三列 */
-.rd-flow {
-  grid-column: 2 / 4;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 292px;
-  column-gap: 30px;
-  align-items: start;
-  padding: 28px 0 60px;
-  min-width: 0;
-}
+/* 中栏 + 右栏：display:contents 让 .rd-row 的子元素直接参与外层三列 grid */
+.rd-flow { display: contents; }
 
-/* 分节标题横跨两列 */
+/* 分节标题横跨序号列之后的两列 */
 .rd-sec-title {
-  grid-column: 1 / 3;
+  grid-column: 3 / 5;
   display: flex; align-items: baseline; gap: 10px;
   font-family: var(--serif); font-size: 19px; font-weight: 600;
-  margin: 40px 0 18px; padding-bottom: 8px;
+  margin: 44px 0 26px; padding: 0 0 10px;
   border-bottom: 1px solid var(--line); scroll-margin-top: 80px;
 }
-.rd-flow > .rd-sec:first-of-type .rd-sec-title { margin-top: 0; }
+.rd-sec-title:first-of-type { margin-top: 0; }
 .rd-sec-count { font-family: var(--mono); font-size: 11.5px; color: var(--ink-faint); font-weight: 400; }
 
-/* 每段：序号固定在左，文字在中，注解在右 */
-.rd-row {
-  display: grid;
-  grid-template-columns: 26px minmax(0, 1fr) 292px;
-  grid-template-areas: 'no orig note';
-  column-gap: 14px;
-  padding-bottom: 26px;
-  scroll-margin-top: 80px;
+/* 每段：序号 / 原文+译文 / 注解 各占一列 */
+.rd-row { display: contents; }
+.rd-no {
+  grid-column: 2; font-family: var(--mono); font-size: 11.5px;
+  color: var(--ink-faint); padding: 9px 10px 34px 0; text-align: right;
 }
-.rd-no { grid-area: no; font-family: var(--mono); font-size: 11.5px; color: var(--ink-faint); padding-top: 7px; }
-.rd-orig { grid-area: orig; min-width: 0; }
-.rd-note { grid-area: note; min-width: 0; padding-top: 4px; }
+.rd-orig { grid-column: 3; min-width: 0; padding: 0 34px 34px 0; }
+.rd-note { grid-column: 4; min-width: 0; padding: 5px 0 34px; }
 
+/* 原文：衬线大字，深墨色 —— 视觉主角 */
 .rd-text {
   margin: 0;
-  padding: 16px 20px;
-  background: var(--card);
-  border-left: 3px solid var(--violet);
-  border-radius: 0 8px 8px 0;
   font-family: var(--serif);
-  font-size: 17px;
-  line-height: 2;
+  font-size: 19px;
+  font-weight: 500;
+  line-height: 1.95;
   color: var(--ink);
+  letter-spacing: 0.01em;
 }
+
+/* 译文：无衬线小字，灰 —— 从属 */
 .rd-trans {
-  margin: 0;
-  padding: 12px 20px 15px;
-  background: var(--card);
-  border-left: 3px solid var(--violet);
-  border-radius: 0 0 8px 0;
-  font-size: 15px;
-  line-height: 1.9;
-  color: var(--ink-soft);
+  margin: 7px 0 0;
+  font-size: 13px;
+  line-height: 1.85;
+  color: var(--ink-faint);
 }
 .rd-trans-label {
-  display: block;
-  font-size: 10.5px; letter-spacing: 0.14em;
-  color: var(--ink-faint); margin-bottom: 5px;
+  display: inline;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--ink-faint);
+  margin-right: 8px;
+  padding: 1px 6px;
+  border: 0.5px solid var(--line);
+  border-radius: 3px;
+  vertical-align: 2px;
 }
 .rd-note-label {
   display: block;
@@ -117,36 +108,44 @@
 .rd-note strong { color: var(--ink); font-weight: 600; }
 
 .pager {
-  grid-column: 1 / 3;
+  grid-column: 2 / 5;
   display: flex; justify-content: space-between; gap: 16px;
-  margin-top: 48px; padding-top: 24px;
+  margin: 48px 0 0; padding: 24px 0 60px;
   border-top: 1px solid var(--line); font-size: 14.5px;
 }
 .pager a { color: var(--ink-soft); max-width: 46%; }
 .pager span { color: var(--ink-faint); font-size: 12.5px; display: block; }
 
-/* 中屏：目录 + 单内容列，注解在原文下方 */
-@media (max-width: 1100px) {
+/* 中屏：去掉序号列，注解落到原文下方 */
+@media (max-width: 1080px) {
   .reader { grid-template-columns: 150px minmax(0, 1fr); }
-  .rd-flow { grid-column: 2; grid-template-columns: minmax(0, 1fr); }
-  .rd-row { grid-template-columns: 26px minmax(0, 1fr); grid-template-areas: 'no orig' 'no note'; }
-  .rd-sec-title, .pager { grid-column: 1; }
-  .rd-note { padding-top: 12px; border-top: 1px dashed var(--line); }
-  .rd-note-label { border-bottom: none; }
+  .rd-sec-title { grid-column: 2; }
+  .pager { grid-column: 2; }
+  .rd-no { display: none; }
+  .rd-orig { grid-column: 2; padding-right: 0; }
+  .rd-note {
+    grid-column: 2;
+    padding: 0 0 30px;
+    border-top: 1px dashed var(--line);
+    margin-top: -8px;
+    padding-top: 14px;
+  }
+  .rd-note-label { border-bottom: none; padding-bottom: 0; margin-bottom: 6px; }
 }
 
 /* 窄屏：单栏 */
 @media (max-width: 720px) {
   .wrap-wide, .reader { padding-left: 20px; padding-right: 20px; }
-  .reader { grid-template-columns: 1fr; }
+  .reader { grid-template-columns: minmax(0, 1fr); }
   .rd-side {
     grid-column: 1;
     position: static; max-height: none; overflow: visible;
     border-right: none; border-bottom: 1px solid var(--line);
     padding: 20px 0 14px;
   }
-  .rd-flow { grid-column: 1; padding: 24px 0 48px; }
-  .rd-row { grid-template-columns: 24px minmax(0, 1fr); column-gap: 10px; }
-  .rd-text { font-size: 16px; padding: 14px 16px; line-height: 1.95; }
-  .rd-trans { padding: 11px 16px 14px; font-size: 14.5px; }
+  .rd-sec-title, .pager { grid-column: 1; }
+  .rd-orig { grid-column: 1; padding-right: 0; }
+  .rd-note { grid-column: 1; }
+  .rd-text { font-size: 17px; line-height: 1.95; }
+  .rd-trans { font-size: 12.5px; margin-top: 6px; }
 }
