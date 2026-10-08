@@ -358,7 +358,7 @@ a:hover { text-decoration: underline; }
 
 .callout {
   background: var(--teal-soft);
-  border: 1px solid #b9ddd0;
+  border: 1px solid var(--note-line);
   border-radius: 10px;
   padding: 20px 24px;
   margin: 30px 0;

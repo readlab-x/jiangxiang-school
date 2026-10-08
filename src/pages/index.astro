@@ -5,6 +5,7 @@ import SixWords from '../components/SixWords.astro';
 import SlangTable from '../components/SlangTable.astro';
 import { bookSegments, segmentMeta } from '../data/segments';
 import { withBase } from '../utils/paths';
+import { drama } from '../data/drama';
 
 const books = ['yingyao', 'junma', 'zhafei', 'abao'].map((slug) => ({
   slug,
@@ -23,7 +24,7 @@ const lineage = [
 
 <Base
   title="江相派 · 江湖上的宰相"
-  description="江相派：晚清民初活跃于广东的诈骗集团。四本秘本原文逐段注解，七步流水线、六字真言、江湖黑话交互式拆解。"
+  description="江相派是什么：晚清民初活跃于广东的诈骗集团，以看相算命为途径做局诈骗。四本秘本原文逐段注解，七步流水线、六字真言、江湖黑话交互式拆解。电视剧《我不是大师》取材于这一真实江湖组织。"
 >
   <section class="hero">
     <div class="wrap">
@@ -211,6 +212,63 @@ const lineage = [
       <p style="margin-top:32px">
         <a class="more-link" href={withBase('mechanism/')}>展开阅读：为什么会相信 · 完整机制与原文对照 →</a>
       </p>
+    </div>
+  </section>
+
+  <section class="band" id="drama">
+    <div class="wrap">
+      <p class="band-kicker">2026 年 9 月 · 腾讯视频 / 爱奇艺</p>
+      <h2>电视剧《我不是大师》里的江相派</h2>
+      <p class="band-lede">
+        剧集改编自易之的小说《我是个算命先生》，{drama.director}执导，李现、李一桐主演。
+        这部剧让「江相派」这个词被更多人听见了——
+        但剧是改编，本站收录的是<strong>秘本原文</strong>。
+      </p>
+
+      <div class="drama-grid">
+        <div class="drama-card">
+          <div class="drama-k">剧中怎么写</div>
+          <p>
+            上官家惨案并非命理玄学，而是有人做局。设局的组织以看相算命为途径寻找目标，
+            剧中主线里化名为「天相派」。吴刚饰演的金不换被其废去双腿，
+            李现饰演的上官诚明拜师学艺，一路以骗反骗、拆局复仇。
+          </p>
+          <p class="drama-note">
+            剧中讲的是<strong>复仇</strong>。而秘本里记的是<strong>手艺</strong>——
+            怎么开口、怎么下套、怎么收场。剧里那些「局」的原始原理，都在下面这几页。
+          </p>
+          <div class="drama-links">
+            {drama.links.map((l) => (
+              <a href={withBase(l.href)}>{l.label}<span>{l.note}</span></a>
+            ))}
+          </div>
+        </div>
+
+        <div class="drama-card">
+          <div class="drama-k">主创</div>
+          <dl class="drama-cast">
+            <dt>导演</dt><dd>{drama.director}</dd>
+            <dt>编剧</dt><dd>{drama.writer}</dd>
+            <dt>原著</dt><dd>{drama.novel.title} · {drama.novel.author}</dd>
+          </dl>
+          <ul class="drama-roles">
+            {drama.cast.map((c) => (
+              <li><strong>{c.actor}</strong><span>{c.role}</span></li>
+            ))}
+          </ul>
+          <div class="drama-k drama-k-2">曾用名</div>
+          <p class="drama-alias">{drama.aliases.join(' · ')}</p>
+        </div>
+      </div>
+
+      <div class="callout">
+        <div class="callout-title">如果你先看剧，再来读原文</div>
+        <p>
+          剧里的「天相派」是虚构化名，江相派是真实存在过的江湖组织。
+          两者最值得对照的一点是：<strong>剧里靠恐惧驱动，秘本里靠「有所畏怯而不敢言」</strong>——
+          恐吓人只是手段，让受害者不敢报警才是整套体系的地基。
+        </p>
+      </div>
     </div>
   </section>
 

@@ -70,3 +70,18 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v5
+
+  # 部署成功后通知 Bing / Yandex / DuckDuckGo 等支持 IndexNow 的引擎。
+  # 必须排在 deploy 之后 —— 协议要求搜索引擎能回访到 key 文件校验真伪。
+  indexnow:
+    needs: deploy
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      - name: 推送 IndexNow
+        run: node scripts/indexnow-push.mjs

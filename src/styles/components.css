@@ -356,3 +356,107 @@
   padding: 4px 12px;
 }
 .part-nav a:hover { text-decoration: none; border-color: var(--accent); color: var(--accent); }
+
+/* ===== 电视剧关联区块 ===== */
+.drama-grid {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 18px;
+  margin: 26px 0;
+}
+.drama-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 26px 28px;
+  font-size: 14.5px;
+  line-height: 1.9;
+}
+.drama-card p { margin: 0 0 12px; color: var(--ink-soft); }
+.drama-card p:last-child { margin-bottom: 0; }
+.drama-k {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--ink-faint);
+  padding-bottom: 8px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+.drama-k-2 { margin-top: 20px; }
+.drama-note {
+  font-size: 13.5px;
+  color: var(--ink-faint);
+  padding: 12px 14px;
+  background: var(--note-soft);
+  border-radius: 8px;
+}
+.drama-note strong { color: var(--note); }
+
+.drama-links {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin-top: 18px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  overflow: hidden;
+}
+.drama-links a {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 11px 15px;
+  background: var(--paper);
+  font-size: 14px;
+  color: var(--accent);
+}
+.drama-links a:hover { background: var(--card); text-decoration: none; }
+.drama-links a span {
+  font-size: 12.5px;
+  color: var(--ink-faint);
+  text-align: right;
+}
+
+.drama-cast {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 6px 16px;
+  margin: 0 0 4px;
+  font-size: 13.5px;
+}
+.drama-cast dt { color: var(--ink-faint); }
+.drama-cast dd { margin: 0; color: var(--ink); }
+
+.drama-roles {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+.drama-roles li {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 4px 11px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  font-size: 13px;
+}
+.drama-roles strong { font-weight: 500; color: var(--ink); }
+.drama-roles span { color: var(--ink-faint); font-size: 12.5px; }
+
+.drama-alias {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--ink-faint);
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 860px) {
+  .drama-grid { grid-template-columns: 1fr; }
+}
