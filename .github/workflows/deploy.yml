@@ -56,10 +56,16 @@ jobs:
       - name: 校验 base 路径
         run: node scripts/check-base.mjs
 
+      # 校验 IndexNow 推送清单：key 文件命名、兜底清单与实际页面一致
+      - name: 校验 IndexNow 推送清单
+        run: node scripts/check-indexnow.mjs
+
       - name: 上传构建产物
         uses: actions/upload-pages-artifact@v5
         with:
           path: ./dist
+          # 显式命名，indexnow job 据此下载。不依赖 action 的默认 artifact 名。
+          name: pages-artifact
 
   deploy:
     needs: build
@@ -82,6 +88,13 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: 22
+
+      # 脚本优先读 sitemap，需要 dist 才拿得到；传过来保证 URL 清单与产物一致。
+      # 没有这一步也能跑（脚本有内置兜底清单），但 URL 来源会退化为硬编码。
+      - uses: actions/download-artifact@v8
+        with:
+          name: pages-artifact
+          path: ./dist
 
       - name: 推送 IndexNow
         run: node scripts/indexnow-push.mjs

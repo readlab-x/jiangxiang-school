@@ -2,6 +2,3 @@ node_modules/
 dist/
 .astro/
 .DS_Store
-
-# IndexNow 本地密钥（public/indexnow-key.txt 是协议要求的公开文件，需提交）
-.indexnow-key
