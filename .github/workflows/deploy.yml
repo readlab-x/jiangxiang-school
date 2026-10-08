@@ -60,12 +60,18 @@ jobs:
       - name: 校验 IndexNow 推送清单
         run: node scripts/check-indexnow.mjs
 
+      # 校验 Pages artifact 名：deploy-pages 硬编码只认 github-pages
+      - name: 校验 workflow artifact 配置
+        run: node scripts/check-workflow.mjs
+
       - name: 上传构建产物
         uses: actions/upload-pages-artifact@v5
         with:
           path: ./dist
-          # 显式命名，indexnow job 据此下载。不依赖 action 的默认 artifact 名。
-          name: pages-artifact
+          # 不要改这个名字。deploy-pages@v5 硬编码按 "github-pages" 取 artifact，
+          # 改名会导致部署失败（No artifacts named "github-pages" were found）。
+          # upload-pages-artifact 与 deploy-pages 的约定名就是 github-pages。
+          name: github-pages
 
   deploy:
     needs: build
@@ -91,9 +97,10 @@ jobs:
 
       # 脚本优先读 sitemap，需要 dist 才拿得到；传过来保证 URL 清单与产物一致。
       # 没有这一步也能跑（脚本有内置兜底清单），但 URL 来源会退化为硬编码。
+      # 名字须与 upload 侧一致（github-pages），否则下载为空。
       - uses: actions/download-artifact@v8
         with:
-          name: pages-artifact
+          name: github-pages
           path: ./dist
 
       - name: 推送 IndexNow
