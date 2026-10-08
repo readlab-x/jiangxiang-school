@@ -1,5 +1,7 @@
 {
   "name": "jiangxiang-school",
+  "private": true,
+  "description": "江相派秘本原文与注解 —— 四本秘本逐段译文注解、行骗机制拆解",
   "type": "module",
   "version": "0.0.1",
   "engines": {

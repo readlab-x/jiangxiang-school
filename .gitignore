@@ -2,3 +2,6 @@ node_modules/
 dist/
 .astro/
 .DS_Store
+
+# 本地工作记忆，不应进仓库
+.workbuddy/
