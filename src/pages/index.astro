@@ -6,6 +6,7 @@ import SlangTable from '../components/SlangTable.astro';
 import { bookSegments, segmentMeta } from '../data/segments';
 import { withBase } from '../utils/paths';
 import { drama } from '../data/drama';
+import { novel } from '../data/novel';
 
 const books = ['yingyao', 'junma', 'zhafei', 'abao'].map((slug) => ({
   slug,
@@ -24,7 +25,7 @@ const lineage = [
 
 <Base
   title="江相派 · 江湖上的宰相"
-  description="江相派是什么：晚清民初活跃于广东的诈骗集团，以看相算命为途径做局诈骗。四本秘本原文逐段注解，七步流水线、六字真言、江湖黑话交互式拆解。电视剧《我不是大师》取材于这一真实江湖组织。"
+  description="江相派是什么：晚清民初活跃于广东的诈骗集团，以看相算命为途径做局诈骗。四本秘本原文逐段注解，七步流水线、六字真言、江湖黑话交互式拆解。易之纪实小说《我是个算命先生》与电视剧《我不是大师》均取材于这一真实江湖组织。"
 >
   <section class="hero">
     <div class="wrap">
@@ -217,56 +218,112 @@ const lineage = [
 
   <section class="band" id="drama">
     <div class="wrap">
-      <p class="band-kicker">2026 年 9 月 · 腾讯视频 / 爱奇艺</p>
-      <h2>电视剧《我不是大师》里的江相派</h2>
+      <p class="band-kicker">秘本 → 小说 → 电视剧</p>
+      <h2>从「江相派」到《我不是大师》</h2>
       <p class="band-lede">
-        剧集改编自易之的小说《我是个算命先生》，{drama.director}执导，李现、李一桐主演。
-        这部剧让「江相派」这个词被更多人听见了——
-        但剧是改编，本站收录的是<strong>秘本原文</strong>。
+        这二十年里，江相派先被写进小说，再被搬上屏幕。
+        <strong>本站收录的是最前面那一层——秘本原文。</strong>
       </p>
+
+      <div class="chain">
+        <div class="chain-step">
+          <div class="chain-when">民国 · 流传</div>
+          <div class="chain-what">师门秘本</div>
+          <div class="chain-desc">《英耀》《扎飞》《阿宝》三篇口诀，不外传。这是本站收录的部分。</div>
+        </div>
+        <div class="chain-step">
+          <div class="chain-when">{novel.published.slice(0, 4)} · 出版</div>
+          <div class="chain-what">小说《{novel.title}》</div>
+          <div class="chain-desc">易之著，{novel.publisher}。纪实小说，写算命行当的门道。</div>
+        </div>
+        <div class="chain-step">
+          <div class="chain-when">{drama.premiered.slice(0, 4)} 年 {Number(drama.premiered.slice(5, 7))} 月 · 上线</div>
+          <div class="chain-what">电视剧《{drama.title}》</div>
+          <div class="chain-desc">{drama.director}执导，李现、李一桐主演。{drama.platforms.join(' / ')}。</div>
+        </div>
+      </div>
 
       <div class="drama-grid">
         <div class="drama-card">
-          <div class="drama-k">剧中怎么写</div>
+          <div class="drama-k">原著小说</div>
+          <p class="novel-lead">
+            《{novel.title}》，{novel.author}著，{novel.published.slice(0, 4)} 年由{novel.publisher}出版，
+            读客·知识小说文库。豆瓣 <strong>{novel.doubanScore}</strong> 分。
+          </p>
           <p>
-            上官家惨案并非命理玄学，而是有人做局。设局的组织以看相算命为途径寻找目标，
-            剧中主线里化名为「天相派」。吴刚饰演的金不换被其废去双腿，
-            李现饰演的上官诚明拜师学艺，一路以骗反骗、拆局复仇。
+            这不是纯虚构。作者从江相派传人口述取材，写的是民国年间算命行当的真实猫腻。
+            书中主角「祖爷」是江相派掌门人——<strong>电视剧里的天相派首领，原型就是他</strong>。
           </p>
+          <p class="novel-epi">
+            原著开篇没有从故事写起，而是先摆了一句《阿宝篇》：
+          </p>
+          <blockquote class="drama-epi">{novel.epigraph}</blockquote>
           <p class="drama-note">
-            剧中讲的是<strong>复仇</strong>。而秘本里记的是<strong>手艺</strong>——
-            怎么开口、怎么下套、怎么收场。剧里那些「局」的原始原理，都在下面这几页。
+            <strong>但小说不是史料。</strong>
+            本站秘本原文另有来源——公开流传的抄本与百科条目记载，
+            不是从小说里摘录的。<a href={withBase('manuscripts/')}>来源说明 →</a>
           </p>
+        </div>
+
+        <div class="drama-card">
+          <div class="drama-k">电视剧</div>
+          <p class="novel-lead">
+            《{drama.title}》，改编自{novel.author}的《{novel.title}》。
+            {drama.premiered} 起在{drama.platforms.join('、')}播出，共 {drama.episodes} 集。
+          </p>
+          <p>
+            剧里的反派组织叫「天相派」——为避讳，「江相派」三字被换掉了，
+            但原型就是它。故事讲李现饰演的上官诚明被算命做局灭门，
+            拜师学艺后一路以骗反骗。
+          </p>
+          <dl class="drama-cast">
+            <dt>导演</dt><dd>{drama.director}</dd>
+            <dt>编剧</dt><dd>{drama.writer}</dd>
+            <dt>原著</dt><dd>{novel.title} · {novel.author}</dd>
+          </dl>
+          <div class="drama-k drama-k-2">主要演员</div>
+          <ul class="drama-roles">
+            {drama.cast.map((c) => (
+              <li><strong>{c.actor}</strong><span>{c.role}</span></li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <div class="drama-grid drama-grid-2">
+        <div class="drama-card">
+          <div class="drama-k">原著里已经写到的</div>
+          <ul class="overlap-list">
+            {novel.overlaps.map((o) => (
+              <li><strong>{o.key}</strong><span>{o.note}</span></li>
+            ))}
+          </ul>
+          <p class="drama-note" style="margin-top:16px">
+            如果你是从书或剧入坑，这几篇就是源头。<a href={withBase('manuscripts/')}>四篇总览 →</a>
+          </p>
+        </div>
+
+        <div class="drama-card">
+          <div class="drama-k">接着往下读</div>
           <div class="drama-links">
             {drama.links.map((l) => (
               <a href={withBase(l.href)}>{l.label}<span>{l.note}</span></a>
             ))}
           </div>
         </div>
-
-        <div class="drama-card">
-          <div class="drama-k">主创</div>
-          <dl class="drama-cast">
-            <dt>导演</dt><dd>{drama.director}</dd>
-            <dt>编剧</dt><dd>{drama.writer}</dd>
-            <dt>原著</dt><dd>{drama.novel.title} · {drama.novel.author}</dd>
-          </dl>
-          <ul class="drama-roles">
-            {drama.cast.map((c) => (
-              <li><strong>{c.actor}</strong><span>{c.role}</span></li>
-            ))}
-          </ul>
-          <div class="drama-k drama-k-2">曾用名</div>
-          <p class="drama-alias">{drama.aliases.join(' · ')}</p>
-        </div>
       </div>
 
       <div class="callout">
-        <div class="callout-title">如果你先看剧，再来读原文</div>
+        <div class="callout-title">三层之间最值得对照的一点</div>
         <p>
-          剧里的「天相派」是虚构化名，江相派是真实存在过的江湖组织。
-          两者最值得对照的一点是：<strong>剧里靠恐惧驱动，秘本里靠「有所畏怯而不敢言」</strong>——
-          恐吓人只是手段，让受害者不敢报警才是整套体系的地基。
+          小说和剧都按「复仇」写——好人被害、拜师学艺、以骗反诈。
+          但秘本里记的是另一件事：<strong>让受害者「有所畏怯而不敢言」</strong>。
+          恐吓人只是手段，让受害者不敢报警、不敢说出口，才是整套体系能延续的地基。
+        </p>
+        <p>
+          这一条在小说和剧里都有影子，但都只是情节。
+          <strong>只有秘本把它当成必须做到的原则写下来了</strong>——
+          「取之不竭其力，不伤其根，上顺天理，下快人心，并使之有所畏怯而不敢言。」
         </p>
       </div>
     </div>

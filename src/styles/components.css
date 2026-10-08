@@ -460,3 +460,98 @@
 @media (max-width: 860px) {
   .drama-grid { grid-template-columns: 1fr; }
 }
+
+/* ===== 秘本 → 小说 → 电视剧 时间链 ===== */
+.chain {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  margin: 28px 0;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.chain-step {
+  background: var(--card);
+  padding: 22px 24px 24px;
+  position: relative;
+}
+.chain-step + .chain-step { border-left: 1px solid var(--line); }
+.chain-step:first-child::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--accent);
+}
+.chain-when {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.06em;
+  color: var(--ink-faint);
+  margin-bottom: 8px;
+}
+.chain-what {
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.45;
+  margin-bottom: 8px;
+}
+.chain-desc {
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--ink-soft);
+}
+
+/* 小说首句引文 */
+.drama-epi {
+  margin: 0 0 16px;
+  padding: 14px 18px;
+  background: var(--paper);
+  border-left: 2px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  font-family: var(--serif);
+  font-size: 14.5px;
+  line-height: 1.95;
+  color: var(--ink-soft);
+}
+.novel-lead { font-size: 14.5px !important; color: var(--ink) !important; }
+.novel-lead strong { color: var(--accent); }
+.novel-epi { font-size: 13px !important; color: var(--ink-faint) !important; margin-bottom: 10px !important; }
+.drama-note a { color: var(--accent); margin-left: 4px; }
+
+/* 原著与本站内容的交集 */
+.overlap-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+.overlap-list li {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  font-size: 13.5px;
+  line-height: 1.75;
+}
+.overlap-list strong {
+  flex: 0 0 auto;
+  font-family: var(--serif);
+  font-weight: 600;
+  color: var(--accent);
+  min-width: 4.5em;
+}
+.overlap-list span { color: var(--ink-soft); }
+
+.drama-grid-2 { grid-template-columns: 1.35fr 1fr; }
+
+@media (max-width: 860px) {
+  .chain { grid-template-columns: 1fr; }
+  .chain-step + .chain-step { border-left: none; border-top: 1px solid var(--line); }
+  .drama-grid-2 { grid-template-columns: 1fr; }
+}
